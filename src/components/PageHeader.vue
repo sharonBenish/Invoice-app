@@ -81,4 +81,31 @@ header > div:last-of-type{
         border-radius:50%;
     }
 }
+
+@media (min-width:1025px) {
+    header{
+        position: fixed;
+        left:0;
+        height:100vh;
+        width:6.5rem;
+        flex-direction: column;
+        border-radius: 0px 20px 20px 0px;
+        .logo{
+            width:6.5rem;
+            height: 6.5rem;
+        }
+
+    }
+    header > div:last-of-type{
+        flex-direction: column;
+    }
+
+    .profile{
+        height: 5rem;
+        width:6.5rem;
+        border-top: 1px solid #4A4E6E;
+        border-left: 0;
+        flex-direction: column;
+    }
+}
 </style>

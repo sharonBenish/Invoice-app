@@ -30,8 +30,18 @@ body{
   background: $background;
 }
 main{
-  padding:1rem;
-  max-width:850px;
-  margin:0 auto;
+  >div{
+    padding:1rem;
+    max-width:850px;
+    margin:0 auto;
+  }
+  
+}
+
+@media (min-width:1025px) {
+  main{
+    width:calc(100% - 6.5rem);
+    transform: translateX(6.5rem)
+  }
 }
 </style>
