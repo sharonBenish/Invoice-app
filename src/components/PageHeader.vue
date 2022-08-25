@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <header>
     <div class="logo">
         <img src="../assets/logo.svg" alt="">
     </div>
@@ -12,16 +12,18 @@
             <img class="img-fluid" src="../assets/image-avatar.jpeg" alt="avatar">
         </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <script setup>
 </script>
 
 <style lang="scss" scoped >
-.header{
+$purple: #7c5dfa;
+$purple-light:#9277ff;
+header{
     display: flex;
-    height:80px;
+    height:5rem;
     background: #373B53;
     justify-content: space-between;
 }
@@ -32,7 +34,7 @@
     display:flex;
     justify-content: center;
     align-items: center;
-    background:rgb(124, 93, 250);
+    background:$purple;
     border-radius: 0px 20px 20px 0px;
 }
 
@@ -44,14 +46,14 @@
 .logo::after{
     content:"";
     position:absolute;
-    background: rgb(146, 119, 255);
+    background: $purple-light;
     border-radius:20px 0px;
     width:100%;
     height:50%;
     bottom:0;
 }
 
-.header > div:last-of-type{
+header > div:last-of-type{
     display:flex;
 }
 
