@@ -30,8 +30,11 @@ body{
   background: $background;
 }
 main{
+  height:100vh;
+  overflow: scroll;
   >div{
-    padding:1rem;
+    padding:1.5rem;
+    padding-top:7rem;
     max-width:850px;
     margin:0 auto;
   }
@@ -41,7 +44,10 @@ main{
 @media (min-width:1025px) {
   main{
     width:calc(100% - 6.5rem);
-    transform: translateX(6.5rem)
+    transform: translateX(6.5rem);
+    >div{
+      padding-top:5rem;
+    }
   }
 }
 </style>

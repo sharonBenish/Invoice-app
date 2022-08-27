@@ -26,6 +26,10 @@ header{
     height:5rem;
     background: #373B53;
     justify-content: space-between;
+    position: fixed;
+    left:0;
+    right:0;
+    z-index:1000;
 }
 .logo{
     position: relative;
