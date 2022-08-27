@@ -8,6 +8,12 @@
         <button class="filter-btn">
             <p>Filter <span class="extra-btn-text">by status</span></p>
             <span><img src="../assets/icon-arrow-down.svg" alt=""/></span>
+            <div class="drop-down">
+                <div class="option"><CustomCheckbox /> All</div>
+                <div class="option"><CustomCheckbox /> Paid</div>
+                <div class="option"><CustomCheckbox /> Pending</div>
+                <div class="option"><CustomCheckbox /> Draft</div>
+            </div>
         </button>
         <button class="new-invoice-btn">
             <span><img src="../assets/icon-plus.svg" alt=""></span>
@@ -18,8 +24,9 @@
 </template>
 
 <script>
+import CustomCheckbox from './CustomCheckbox.vue';
 export default {
-
+    components: {CustomCheckbox }
 }
 </script>
 
@@ -32,13 +39,14 @@ $purple-light:#9277ff;
     color:rgb(12, 14, 22);
     .intro-text{
         h1{
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             margin-bottom: 0.5rem;
-            font-weight: 600;
+            font-weight: 500;
         }
         p{
             color: rgb(136, 142, 176);
             line-height: 1.125;
+            font-size: 0.7rem;
         }
     }
     .actions{
@@ -56,8 +64,30 @@ $purple-light:#9277ff;
 }
 .filter-btn{
     background: none;
+    position: relative;
     span{
         display:none
+    }
+    .drop-down{
+        text-align: left;
+        position:absolute;
+        width:200px;
+        top:100%;
+        left:0;
+        transform: translateX(-50%);
+        margin-top:30px;
+        box-shadow: rgb(72 84 159 / 25%) 0px 10px 20px;
+        border-radius: 10px;
+        display:flex;
+        display:none;
+        flex-direction: column;
+        gap:1rem;
+        padding:1.5rem 1.2rem;
+        .option{
+            display:flex;
+            align-items: flex-end;
+            gap:1rem;
+        }
     }
 }
 .new-invoice-btn{
@@ -83,19 +113,21 @@ $purple-light:#9277ff;
     display:none
 }
 
+
 @media (min-width:1025px) {
     .container{
         .intro-text{
             h1{
-                font-size: 2.5rem;
+                font-size: 1.8rem;
             }
             p{  
-                font-size: 1.3rem;
+                font-size: 0.9rem;
             }
         }
         .actions{
+            gap:2.5rem;
             button{
-                font-size:1rem;
+                font-size:0.8rem;
             }
         }
     }
@@ -106,6 +138,11 @@ $purple-light:#9277ff;
         span{
             display:inline
         }
+        .drop-down{
+            left:-50px;
+            transform: translateX(0);
+        }
     }
+    
 }
 </style>
