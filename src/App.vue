@@ -30,6 +30,7 @@ body{
   background: $background;
 }
 main{
+  position: relative;
   height:100vh;
   overflow: scroll;
   >div{

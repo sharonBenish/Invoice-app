@@ -15,7 +15,7 @@
                 <div class="option"><CustomCheckbox /> Draft</div>
             </div>
         </button>
-        <button class="new-invoice-btn">
+        <button class="new-invoice-btn" @click="newInvoiceClicked">
             <span><img src="../assets/icon-plus.svg" alt=""></span>
             <p>New <span class="extra-btn-text">Invoice</span></p>
         </button>
@@ -26,7 +26,16 @@
 <script>
 import CustomCheckbox from './CustomCheckbox.vue';
 export default {
-    components: {CustomCheckbox }
+    components: {CustomCheckbox },
+    setup(props, ctx){
+        const newInvoiceClicked = ()=>{
+            ctx.emit('newInvoiceClicked')
+        }
+
+        return{
+            newInvoiceClicked
+        }
+    }
 }
 </script>
 
