@@ -6,9 +6,9 @@
     </div>
     <div class="actions">
         <button class="filter-btn">
-            <p>Filter <span class="extra-btn-text">by status</span></p>
-            <span><img src="../assets/icon-arrow-down.svg" alt=""/></span>
-            <div class="drop-down">
+            <p @click="openDropDown">Filter <span class="extra-btn-text">by status</span></p>
+            <span><img src="../assets/icon-arrow-down.svg" alt="" @click="openDropDown" :class="showDropDown && 'open'" /></span>
+            <div class="drop-down" v-if="showDropDown">
                 <div class="option"><CustomCheckbox /> All</div>
                 <div class="option"><CustomCheckbox /> Paid</div>
                 <div class="option"><CustomCheckbox /> Pending</div>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { ref } from '@vue/reactivity';
 import CustomCheckbox from './CustomCheckbox.vue';
 export default {
     components: {CustomCheckbox },
@@ -31,9 +32,16 @@ export default {
         const newInvoiceClicked = ()=>{
             ctx.emit('newInvoiceClicked')
         }
+        const showDropDown = ref(false);
+        const openDropDown = (event)=>{
+            console.log(event.target)
+            showDropDown.value = !showDropDown.value;
+        }
 
         return{
-            newInvoiceClicked
+            showDropDown,
+            newInvoiceClicked,
+            openDropDown
         }
     }
 }
@@ -88,10 +96,10 @@ $purple-light:#9277ff;
         box-shadow: rgb(72 84 159 / 25%) 0px 10px 20px;
         border-radius: 10px;
         display:flex;
-        display:none;
         flex-direction: column;
         gap:1rem;
         padding:1.5rem 1.2rem;
+        background: #fff;
         .option{
             display:flex;
             align-items: flex-end;
@@ -122,6 +130,14 @@ $purple-light:#9277ff;
     display:none
 }
 
+.filter-btn img{
+    transition: all 0.35s ease;
+}
+
+.filter-btn img.open{
+    transform: rotate(-180deg);
+
+}
 
 @media (min-width:1025px) {
     .container{
