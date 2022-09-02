@@ -1,5 +1,5 @@
 <template>
-  <div class="record">
+  <div class="record" @click="goToRecordInfo()">
     <div class="invoice_id">#{{invoice.id}}</div>
     <div class="due_date">Due {{formatDate}}</div>
     <div class="client_name">{{invoice.clientName}}</div>
@@ -13,6 +13,7 @@
 
 <script>
 import { computed } from '@vue/reactivity';
+import { useRouter } from 'vue-router';
 import StatusBadge from './StatusBadge.vue';
 
 export default {
@@ -26,8 +27,20 @@ export default {
             const dateString = new Date(props.invoice.paymentDue).toDateString();
             return `${dateString.substring(8, 10)} ${dateString.substring(4, 7)} ${dateString.substring(11, 15)}`;
         });
+
+        const router = useRouter();
+        const goToRecordInfo = ()=>{
+            router.push({
+                name:'InvoiceInfo',
+                params:{
+                    id:props.invoice.id,
+                    info:JSON.stringify(props.invoice)
+                }
+            })
+        }
         return {
-            formatDate
+            formatDate,
+            goToRecordInfo
         };
     },
     components: { StatusBadge }

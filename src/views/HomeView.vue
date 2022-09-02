@@ -9,16 +9,22 @@
 </template>
 
 <script>
+//import { storeToRefs } from "pinia";
+import { InvoiceStore } from "@/store/store";
 import NewInvoiceForm from "@/components/NewInvoiceForm.vue";
 import InvoiceOptions from "../components/InvoiceOptions.vue";
 import InvoiceRecord from "@/components/InvoiceRecord.vue";
-import json from '../data.json'
+//import json from '../data.json';
 import { ref } from "vue";
 export default {
     components: { InvoiceOptions, InvoiceRecord, NewInvoiceForm },
     setup(){
-      const invoiceData = json;
+      //const invoiceData = json;
       const isInvoiceFormOpen = ref(false);
+
+      const store = InvoiceStore();
+      const { invoiceData } = store;
+      
       return{
         invoiceData,
         isInvoiceFormOpen

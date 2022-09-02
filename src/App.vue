@@ -9,6 +9,16 @@
 
 <script setup>
 import PageHeader from './components/PageHeader.vue';
+import json from "./data.json"
+import { InvoiceStore } from "@/store/store";
+import { onMounted } from '@vue/runtime-core';
+
+const invoiceStore = InvoiceStore()
+onMounted(()=>{
+  invoiceStore.loadInvoices(json)
+  console.log(invoiceStore.invoiceData)
+})
+
 </script>
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700&display=swap');

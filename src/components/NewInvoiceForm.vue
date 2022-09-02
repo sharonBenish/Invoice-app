@@ -7,19 +7,20 @@
             <div>
                 <div class="address">
                     <label for="from-address">Street Address</label>
-                    <input type="text" id="from-address" v-model="formDetails.fromAddress">
+                    <input type="text" id="from-address" v-model="formDetails.
+                    senderAddress.street">
                 </div>
                 <div class="city">
                     <label for="from-city">City</label>
-                    <input type="text" id="from-city" v-model="formDetails.fromCity">
+                    <input type="text" id="from-city" v-model="formDetails.senderAddress.city">
                 </div>
                 <div class="postcode">
                     <label for="from-postcode">Post Code</label>
-                    <input type="text" id="from-postcode" v-model="formDetails.fromPostcode">
+                    <input type="text" id="from-postcode" v-model="formDetails.senderAddress.postCode">
                 </div>
                 <div class="country">
                     <label for="from-country">Country</label>
-                    <input type="text" id="from-country" v-model="formDetails.fromCountry">
+                    <input type="text" id="from-country" v-model="formDetails.senderAddress.country">
                 </div>
             </div>
             <h3>Bill To</h3>
@@ -34,19 +35,19 @@
                 </div>
                 <div class="address">
                     <label for="to-address">Street Address</label>
-                    <input type="text" id="to-address" v-model="formDetails.toAddress">
+                    <input type="text" id="to-address" v-model="formDetails.clientAddress.street">
                 </div>
                 <div class="city">
                     <label for="to-city">City</label>
-                    <input type="text" id="to-city" v-model="formDetails.toCity">
+                    <input type="text" id="to-city" v-model="formDetails.clientAddress.city">
                 </div>
                 <div class="postcode">
                     <label for="to-postcode">Post Code</label>
-                    <input type="text" id="to-postcode" v-model="formDetails.toPostcode">
+                    <input type="text" id="to-postcode" v-model="formDetails.clientAddress.postCode">
                 </div>
                 <div class="country">
                     <label for="to-country">Country</label>
-                    <input type="text" id="to-country" v-model="formDetails.toCountry">
+                    <input type="text" id="to-country" v-model="formDetails.clientAddress.country">
                 </div>
                 <div class="invoice-date">
                     <p class="label">Invoice Date</p>
@@ -55,10 +56,10 @@
                 <div class="payment-terms">
                     <p class="label">Payment Terms</p>
                     <select name="devices" class="input" v-model="formDetails.paymentTerms">
-                        <option value="1-day" selected >Next 1 day</option>
-                        <option value="7-days">Next 7 days</option>
-                        <option value="14-days">Next 14 days</option>
-                        <option value="30-days">Next 30 days</option>
+                        <option value=1>Next 1 day</option>
+                        <option value=7>Next 7 days</option>
+                        <option value=14>Next 14 days</option>
+                        <option value=30>Next 30 days</option>
                     </select>
                 </div>
                 <div>
@@ -70,16 +71,16 @@
             <div class="invoice-items" v-for="(i,index) in invoiceItemsNumber" :key="i" >
                 <div class="item-name">
                     <label>Item name</label>
-                    <input type="text" v-model="formDetails.invoiceItems[index].itemName">
+                    <input type="text" v-model="formDetails.items[index].name">
                 </div>
                 <div class="items">
                     <div class="qty">
                         <label>Qty</label>
-                        <input type="number" v-model="formDetails.invoiceItems[index].qty">
+                        <input type="number" v-model="formDetails.items[index].quantity">
                     </div>
                     <div class="price">
                         <label>Price</label>
-                        <input type="number" v-model="formDetails.invoiceItems[index].price">
+                        <input type="number" v-model="formDetails.items[index].price">
                     </div>
                     <div class="total">
                         <label>Total</label>
@@ -93,13 +94,14 @@
         <div class="button-group">
             <button class="discard-btn" @click="discardClicked">Discard</button>
             <button class="draft-btn">Save as Draft</button>
-            <button class="save-btn">Save & Send</button>
+            <button class="save-btn" @click="saveInvoice">Save & Send</button>
         </div>
     </div>
   </div>
 </template>
 
 <script>
+import { InvoiceStore } from '@/store/store';
 import { ref } from '@vue/reactivity';
 import { computed } from '@vue/runtime-core';
 export default {
@@ -110,23 +112,30 @@ export default {
     },
     setup(props,ctx){
         const formDetails = ref({
-            fromAddress:"",
-            fromPostCode:"",
-            fromCity:"",
-            fromCountry:"",
+            id: '',
+            createdAt: '',
+            paymentDue: '',
+            status:"pending",
+            senderAddress:{
+                street:"",
+                city:"",
+                postCode:"",
+                country:""
+            },
+            clientAddress:{
+                street:"",
+                city:"",
+                postCode:"",
+                country:""
+            },
             clientName:"",
             clientEmail:"",
-            toAddress:"",
-            toCity:"",
-            toPostcode:"",
-            toCountry:"",
-            paymentTerms:"1-day",
+            paymentTerms:1,
             description:"",
-            invoiceItems:[
-                
-            ]
-
+            items:[],
+            total:null
         })
+
         const invoiceItemsNumber = ref(0);
         const discardClicked = ()=>{
             ctx.emit('discardClicked')
@@ -134,18 +143,18 @@ export default {
         
         const addNewItem = ()=>{
             invoiceItemsNumber.value ++;
-            console.log(formDetails.value.invoiceItems)
-            formDetails.value.invoiceItems.push({
-                itemName:"",
-                qty:null,
+            console.log(formDetails.value.items)
+            formDetails.value.items.push({
+                name:"",
+                quantity:null,
                 price:null,
+                total:null,
             })
         }
         const deleteItem = (index)=>{
             console.log(index);
-            formDetails.value.invoiceItems.splice(index,1);
+            formDetails.value.items.splice(index,1);
             invoiceItemsNumber.value -=1;
-
         }
 
         const todayDate = computed(()=>{
@@ -154,10 +163,37 @@ export default {
             return date.toLocaleDateString('en-US', options)
         })
         const getTotal = (indx)=>{
-            const item = formDetails.value.invoiceItems[indx];
-            const qty = item.qty;
+            const item = formDetails.value.items[indx];
+            const qty = item.quantity;
             const price = item.price;
             return qty * price;
+        }
+
+        const invoiceTotal = computed(()=>{
+            return formDetails.value.items.map(item => item.total).reduce((a,b)=> a+b, 0)
+        })
+
+        const store = InvoiceStore();
+
+        const saveInvoice = ()=>{
+            const date = new Date();
+            const paymentDate= new Date();
+            paymentDate.setDate(date.getDate() + formDetails.value.paymentTerms);
+            const paymentDue = paymentDate.toISOString().substring(0,10);
+            const createdAt = date.toISOString().substring(0,10);
+
+            console.log(createdAt);
+            console.log(paymentDue);
+
+            formDetails.value.id = "RT3080";
+            formDetails.value.createdAt = createdAt;
+            formDetails.value.paymentDue = paymentDue;
+            formDetails.value.total = invoiceTotal.value;
+            console.log(formDetails.value)
+            
+            store.addNewInvoice(formDetails.value)
+
+            ctx.emit('discardClicked')
         }
         return{
             todayDate,
@@ -166,7 +202,8 @@ export default {
             invoiceItemsNumber,
             addNewItem,
             deleteItem,
-            formDetails
+            formDetails,
+            saveInvoice
         }
     }
 }
