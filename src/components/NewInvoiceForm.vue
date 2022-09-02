@@ -76,15 +76,16 @@
                 <div class="items">
                     <div class="qty">
                         <label>Qty</label>
-                        <input type="number" v-model="formDetails.items[index].quantity">
+                        <input type="number" v-model="formDetails.items[index].quantity" @input="getTotal(index)">
                     </div>
                     <div class="price">
                         <label>Price</label>
-                        <input type="number" v-model="formDetails.items[index].price">
+                        <input type="number" v-model="formDetails.items[index].price" @input="getTotal(index)">
                     </div>
                     <div class="total">
                         <label>Total</label>
-                        <div>{{getTotal(index)}}</div>
+                        <input type="number" readonly v-model="formDetails.items[index].total">
+                        <!--<div>{{getTotal(index)}}</div>-->
                     </div>
                     <img src="../assets/icon-delete.svg" alt="" @click="deleteItem(index)">
                 </div>
@@ -166,7 +167,7 @@ export default {
             const item = formDetails.value.items[indx];
             const qty = item.quantity;
             const price = item.price;
-            return qty * price;
+            formDetails.value.items[indx].total = qty * price;
         }
 
         const invoiceTotal = computed(()=>{
