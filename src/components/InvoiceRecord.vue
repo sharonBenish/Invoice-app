@@ -34,7 +34,6 @@ export default {
                 name:'InvoiceInfo',
                 params:{
                     id:props.invoice.id,
-                    info:JSON.stringify(props.invoice)
                 }
             })
         }
