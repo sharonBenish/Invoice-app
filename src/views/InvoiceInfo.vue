@@ -76,6 +76,11 @@
                 </div>
             </div>
         </div>
+        <div class="footer">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+            <button class="mark" v-if="info.status != 'paid'" @click="markAsPaid">Mark As Paid</button>
+        </div>
     </div>
 </template>
 
@@ -306,6 +311,15 @@ table{
     }
 }
 
+.footer{
+    margin: 0 -1.5rem;
+    margin-top:2.5rem;
+    padding: 1rem;
+    background:#fff;
+    display:flex;
+    justify-content: space-between;
+}
+
 @media (min-width:1025px) {
     .container{
         .info-container{
@@ -364,6 +378,10 @@ table{
         div{
             border:none
         }
+    }
+
+    .footer{
+        display:none
     }
 }
 </style>
