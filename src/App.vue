@@ -1,8 +1,9 @@
 <template>
   <div class="main-page">
     <PageHeader />
+    <DeleteModal :id="invoiceId" v-if="showDeleteModal" @cancelClicked="showDeleteModal = false" @deleteClicked="deleteInvoice" />
     <main>
-      <router-view></router-view>
+      <router-view @deleteClicked="OpenDeleteModal"></router-view>
     </main>
   </div>
 </template>
@@ -11,13 +12,28 @@
 import PageHeader from './components/PageHeader.vue';
 import json from "./data.json"
 import { InvoiceStore } from "@/store/store";
-import { onMounted } from '@vue/runtime-core';
+import { ref } from '@vue/runtime-core';
+import DeleteModal from './components/DeleteModal.vue';
+import { useRouter } from 'vue-router';
 
 const invoiceStore = InvoiceStore()
-onMounted(()=>{
-  invoiceStore.loadInvoices(json)
-})
+invoiceStore.loadInvoices(json)
 
+const router = useRouter()
+
+const showDeleteModal = ref(false);
+const invoiceId = ref('');
+const OpenDeleteModal = (id)=>{
+  showDeleteModal.value = true;
+  invoiceId.value= id;
+}
+const deleteInvoice = ()=>{
+  invoiceStore.deleteInvoice(invoiceId.value);
+  showDeleteModal.value = false;
+  setTimeout(()=>{
+    router.go(-1);
+  }, 1500)
+}
 </script>
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700&display=swap');

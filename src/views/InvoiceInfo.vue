@@ -14,7 +14,7 @@
                 </div>
                 <div>
                     <button class="edit">Edit</button>
-                    <button class="delete">Delete</button>
+                    <button class="delete" @click="deleteClicked">Delete</button>
                     <button class="mark" v-if="info.status != 'paid'" @click="markAsPaid">Mark As Paid</button>
                 </div>
             </div>
@@ -78,7 +78,7 @@
         </div>
         <div class="footer">
             <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
+            <button class="delete" @click="deleteClicked">Delete</button>
             <button class="mark" v-if="info.status != 'paid'" @click="markAsPaid">Mark As Paid</button>
         </div>
     </div>
@@ -90,13 +90,15 @@ import { ref } from '@vue/runtime-core';
 import { useRoute, useRouter } from 'vue-router'
 import StatusBadge from '@/components/StatusBadge.vue';
 export default {
-    setup() {
+    setup(props, ctx) {
         const route = useRoute();
         const router = useRouter();
 
         const id = ref();
         id.value = route.params.id;
-        
+        const deleteClicked = ()=>{
+            ctx.emit('deleteClicked', id.value)
+        }
         const goBack = ()=>{
             router.go(-1);
         }
@@ -106,8 +108,10 @@ export default {
             console.log("marked")
             store.markAsPaid(id.value)
         }
+
         return {
             info,
+            deleteClicked,
             goBack,
             markAsPaid
         };
@@ -117,6 +121,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.test{
+    position:fixed;
+    top:0;
+    left:0;
+}
 .container{
     max-width:700px;
     .info-container{
