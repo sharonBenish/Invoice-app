@@ -2,7 +2,7 @@
   <div class="container">
     <div class="intro-text">
         <h1>Invoices</h1>
-        <p>There are 7 total invoices</p>
+        <p>There are {{store.invoiceCount}} total invoices</p>
     </div>
     <div class="actions">
         <button class="filter-btn">
@@ -24,11 +24,14 @@
 </template>
 
 <script>
+import { InvoiceStore } from '@/store/store';
 import { ref } from '@vue/reactivity';
 import CustomCheckbox from './CustomCheckbox.vue';
 export default {
     components: {CustomCheckbox },
     setup(props, ctx){
+        const store = InvoiceStore();
+
         const newInvoiceClicked = ()=>{
             ctx.emit('newInvoiceClicked')
         }
@@ -39,6 +42,7 @@ export default {
         }
 
         return{
+            store,
             showDropDown,
             newInvoiceClicked,
             openDropDown
