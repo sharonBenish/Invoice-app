@@ -16,7 +16,6 @@ import { onMounted } from '@vue/runtime-core';
 const invoiceStore = InvoiceStore()
 onMounted(()=>{
   invoiceStore.loadInvoices(json)
-  console.log(invoiceStore.invoiceData)
 })
 
 </script>
