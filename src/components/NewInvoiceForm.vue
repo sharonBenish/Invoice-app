@@ -94,7 +94,7 @@
         </div>
         <div class="button-group">
             <button class="discard-btn" @click="discardClicked">Discard</button>
-            <button class="draft-btn">Save as Draft</button>
+            <button class="draft-btn" @click="saveAsDraft">Save as Draft</button>
             <button class="save-btn" @click="saveInvoice">Save & Send</button>
         </div>
     </div>
@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import { nanoid } from 'nanoid';
 import { InvoiceStore } from '@/store/store';
 import { ref } from '@vue/reactivity';
 import { computed } from '@vue/runtime-core';
@@ -112,6 +113,7 @@ export default {
         }
     },
     setup(props,ctx){
+        const store = InvoiceStore();
         const formDetails = ref({
             id: '',
             createdAt: '',
@@ -135,12 +137,8 @@ export default {
             description:"",
             items:[],
             total:null
-        })
-
+        });
         const invoiceItemsNumber = ref(0);
-        const discardClicked = ()=>{
-            ctx.emit('discardClicked')
-        }
         
         const addNewItem = ()=>{
             invoiceItemsNumber.value ++;
@@ -174,9 +172,7 @@ export default {
             return formDetails.value.items.map(item => item.total).reduce((a,b)=> a+b, 0)
         })
 
-        const store = InvoiceStore();
-
-        const saveInvoice = ()=>{
+        const addToInvoiceList=()=>{
             const date = new Date();
             const paymentDate= new Date();
             paymentDate.setDate(date.getDate() + formDetails.value.paymentTerms);
@@ -186,14 +182,25 @@ export default {
             console.log(createdAt);
             console.log(paymentDue);
 
-            formDetails.value.id = "RT3080";
+            formDetails.value.id = nanoid(6).toUpperCase();
             formDetails.value.createdAt = createdAt;
             formDetails.value.paymentDue = paymentDue;
             formDetails.value.total = invoiceTotal.value;
             console.log(formDetails.value)
             
             store.addNewInvoice(formDetails.value)
+        }
 
+        const saveInvoice = ()=>{
+            addToInvoiceList()
+            ctx.emit('discardClicked')
+        }
+
+        const saveAsDraft = ()=>{
+            formDetails.value.status= 'draft';
+            saveInvoice()
+        }
+        const discardClicked = ()=>{
             ctx.emit('discardClicked')
         }
         return{
@@ -204,7 +211,8 @@ export default {
             addNewItem,
             deleteItem,
             formDetails,
-            saveInvoice
+            saveInvoice,
+            saveAsDraft,
         }
     }
 }
