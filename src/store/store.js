@@ -10,7 +10,7 @@ export const InvoiceStore = defineStore("invoice", {
         },
         invoiceCount:(state)=>{
             return state.invoiceData.length
-        }
+        },
 
     },
     actions:{
@@ -25,6 +25,9 @@ export const InvoiceStore = defineStore("invoice", {
             //console.log(invoice);
             invoice.status = "paid";
             //console.log(this.invoiceData)
+        },
+        deleteInvoice(id){
+            this.invoiceData = this.invoiceData.filter(invoice => invoice.id !== id);
         }
     }
 })
