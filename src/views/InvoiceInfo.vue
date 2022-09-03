@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <button class="back">
+        <button class="back" @click="goBack">
             <img src="../assets/icon-arrow-left.svg" alt="">
             Go back
         </button>
@@ -87,14 +87,19 @@
 <script>
 import { InvoiceStore } from '@/store/store';
 import { ref } from '@vue/runtime-core';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import StatusBadge from '@/components/StatusBadge.vue';
 export default {
     setup() {
         const route = useRoute();
+        const router = useRouter();
+
         const id = ref();
         id.value = route.params.id;
         
+        const goBack = ()=>{
+            router.go(-1);
+        }
         const store = InvoiceStore();
         const info = store.getInvoiceById(id.value);
         const markAsPaid = ()=>{
@@ -103,6 +108,7 @@ export default {
         }
         return {
             info,
+            goBack,
             markAsPaid
         };
     },
