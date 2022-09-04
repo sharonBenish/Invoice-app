@@ -55,12 +55,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$purple: #7c5dfa;
-$purple-light:#9277ff;
 .container{
     display:flex;
     justify-content: space-between;
-    color:rgb(12, 14, 22);
     .intro-text{
         h1{
             font-size: 1.5rem;
@@ -87,7 +84,7 @@ $purple-light:#9277ff;
     }
 }
 .filter-btn{
-    background: none;
+    background: transparent;
     position: relative;
     span{
         display:none
@@ -106,7 +103,6 @@ $purple-light:#9277ff;
         flex-direction: column;
         gap:1rem;
         padding:1.5rem 1.2rem;
-        background: #fff;
         .option{
             display:flex;
             align-items: flex-end;
@@ -118,7 +114,6 @@ $purple-light:#9277ff;
     height: 50px;
     padding:0 0.8rem;
     color:#fff;
-    background:$purple;
     border-radius: 50px;
     >span{
         width:30px;
@@ -128,9 +123,6 @@ $purple-light:#9277ff;
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-    }
-    &:hover{
-        background: $purple-light;
     }
 }
 .extra-btn-text{
@@ -177,4 +169,22 @@ $purple-light:#9277ff;
     }
     
 }
+</style>
+
+<style scoped>
+    .container{
+        color:var(--text-bold);
+    }
+    .filter-btn{
+        color:var(--text-bold)
+    }
+    .filter-btn .drop-down{
+        background: var(--invoice-bg);
+    }
+    .new-invoice-btn{
+        background:var(--purple);
+    }
+    .new-invoice-btn:hover{
+        background: var(--purple-light);
+    }
 </style>

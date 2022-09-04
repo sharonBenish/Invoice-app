@@ -8,7 +8,7 @@
         <div class="info-container">
             <div class="header">
                 <div>
-                    <span>Status</span>
+                    <span class="status-text">Status</span>
                     <div class="status-tag">
                         <StatusBadge :status="info.status"/>
                     </div>
@@ -78,7 +78,7 @@
             </div>
         </div>
         <div class="footer">
-            <button class="edit">Edit</button>
+            <button class="edit" @click="isInvoiceFormOpen = true">Edit</button>
             <button class="delete" @click="deleteClicked">Delete</button>
             <button class="mark" v-if="info.status != 'paid'" @click="markAsPaid">Mark As Paid</button>
         </div>
@@ -126,6 +126,12 @@ export default {
 }
 </script>
 
+<style scoped>
+.header{
+    background:var(--invoice-bg)
+}
+</style>
+
 <style scoped lang="scss">
 .invoice-container.formOpen{
   max-height: 100vh;
@@ -141,7 +147,6 @@ export default {
     .info-container{
         .header{
             margin-top:2rem;
-            background: #fff;
             border-radius:10px;
             padding:1rem 1.5rem;
             display:flex;
@@ -163,9 +168,14 @@ export default {
     }
 }
 
+.status-text{
+    color:var(--add-item-color)
+}
+
 button{
     border:none;
     background: transparent;
+    color:var(--text-bold);
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
@@ -186,8 +196,8 @@ button{
 }
 
 .edit{
-    background: rgb(249, 250, 254);
-    color: #7e88c3;
+    background: var(--add-item-bg);
+    color: var(--add-item-color);
     &:hover{
         background:rgb(223, 227, 250)
     }
@@ -212,12 +222,12 @@ button{
 .main-info{
     margin-top:1.5rem;
     border-radius:10px;
-    background:#fff;
+    background:var(--invoice-bg);
     padding:1.5rem;
 }
 
 .bold{
-    color:rgb(12, 14, 22);
+    color:var(--text-bold);
     font-weight:bold;
     font-size:1.2rem;
 }
@@ -229,7 +239,7 @@ button{
 .id{
     font-weight:bold;
     font-size:0.9rem;
-    color:rgb(12, 14, 22);
+    color:var(--text-bold);
     margin-bottom:5px;
     >span{
         color: rgb(126, 136, 195)
@@ -241,11 +251,11 @@ button{
 }
 
 .info{
-    color:rgb(136, 142, 176);
+    color:var(--text);
     font-size:1rem;
     display:grid;
     grid-template-columns: repeat(2,1fr);
-    gap:1.5rem;
+    row-gap:1.5rem;
     line-height:1rem;
     margin-bottom:3rem;
 }
@@ -278,7 +288,7 @@ button{
 }
 
 .order-table{
-    background:#F9FAFE;
+    background:var(--order-bg);
     border-radius: 10px 10px 0 0;
     padding:0.8rem 0.5rem;
 }
@@ -286,9 +296,9 @@ button{
 table{
         width:100%;
         border-spacing: 1rem;
-        color:rgb(136, 142, 176);
+        color:var(--text);
         th{
-            color:rgb(136, 142, 176);
+            color:var(--text);
             font-weight: 200;
             font-size: 0.85rem;
         }
@@ -298,7 +308,7 @@ table{
             font-size: 1rem;
         }
         td.bold{
-            color:rgb(12, 14, 22);
+            color:var(--text-bold);
             font-size: 1rem;
         }
         td,th{
@@ -317,7 +327,7 @@ table{
 }
 
 .total{
-    background: #373B53;
+    background: var(--total-bg);
     color:#fff;
     display:flex;
     justify-content: space-between;
@@ -340,9 +350,10 @@ table{
     margin: 0 -1.5rem;
     margin-top:2.5rem;
     padding: 1rem;
-    background:#fff;
+    background:var(--invoice-bg);
     display:flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap:20px;
 }
 
 @media (min-width:1025px) {

@@ -2,7 +2,7 @@
   <div class="modal-container">
     <div class="modal-content">
         <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete invoice {{id}}</p>
+        <p>Are you sure you want to delete invoice {{id}}? This action cannot be undone.</p>
         <div class="button-group">
             <button class="cancel" @click="cancelClicked">Cancel</button>
             <button class="delete" @click="deleteClicked">Delete</button>
@@ -51,10 +51,17 @@ export default {
     max-width:100vw;
 }
 
+h2{
+    color:var(--text-bold);
+}
+
 .modal-content{
-    background: #fff;
+    background: var(--invoice-bg);
     border-radius: 10px;
-    padding:2rem 1.5rem;
+    padding:2.5rem ;
+    font-size: 1.2rem;
+    max-width:500px;
+    line-height: 2rem;
 }
 
 .button-group{
@@ -66,7 +73,7 @@ export default {
 
 p{
     margin:1rem 0;
-    color:rgb(136, 142, 176);
+    color:var(--text);
 }
 
 button{
@@ -77,8 +84,8 @@ button{
 }
 
 .cancel{
-    background: rgb(249, 250, 254);
-    color: #7e88c3;
+    background: var(--add-item-bg);
+    color: var(--add-item-color);
     &:hover{
         background:rgb(223, 227, 250)
     }

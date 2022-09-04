@@ -94,7 +94,7 @@
             <button class="add-item" @click="addNewItem">+ Add New Item</button>
         </div>
         <div v-if="id" class="button-group edit-mode">
-            <button class="discard-btn" @click="discardClicked">Edit</button>
+            <button class="discard-btn" @click="discardClicked">Cancel</button>
             <button class="save-changes" @click="saveChanges">Save Changes</button>
         </div>
         <div v-else class="button-group">
@@ -249,15 +249,16 @@ export default {
 
 h2{
     font-weight:500;
+    color:var(--text-bold)
 }
 h2 > span{
-    color:rgb(126, 136, 195);
+    color:#7e88c3;
 }
 
 h3{
     font-size: 1rem;
     line-height: 1.125;
-    color: #7c5dfa;
+    color: var(--purple);
 }
 
 .form_container{
@@ -266,7 +267,7 @@ h3{
     flex-direction: column;
     justify-content: space-between;
     padding:20px;
-    background: #fff;
+    background: var(--background);
 }
 
 .form{
@@ -281,7 +282,7 @@ h3{
     flex-wrap: wrap;
     label, .label{
         display: block;
-        color: rgb(126, 136, 195);
+        color: var(--form-text);
         margin-bottom: 10px;
     };
     >div{
@@ -297,14 +298,16 @@ h3{
     input, .input{
         width:100%;
         outline: 0;
-        border: 1px solid #dfe3fa;
+        color:var(--text-bold);
+        background:var(--form-field);
+        border: 1px solid var(--form-field-border);
         border-radius: 4px;
         padding: 1rem 1.25rem;
         &:focus{
             border-color: #7c5dfa;
         }
         &::placeholder{
-            color:rgb(136, 142, 176);
+            color:var(--form-text-bold);
         }
     }
     
@@ -312,14 +315,14 @@ h3{
 
 .items-heading{
     margin-bottom: 1.5rem;
-    color: rgb(119, 127, 152);
+    color: var(--form-text-bold);
     font-size: 1.5rem;
 }
 
 .add-item{
     width:100%;
-    background: rgb(249, 250, 254);
-    color: rgb(126, 136, 195);
+    background: var(--add-item-bg);
+    color: var(--add-item-color);
     padding: 1rem 1.5rem;
     outline:0;
     border:0;
@@ -329,7 +332,9 @@ h3{
 
 .button-group{
     display:flex;
+    padding-top:1.5rem ;
     justify-content: space-between;
+    align-items: center;
     button{
     padding: 1rem 1.3rem;
     outline:0;
@@ -338,12 +343,16 @@ h3{
     cursor:pointer;
     }
     .discard-btn{
-    background: rgb(249, 250, 254);
-    color: rgb(126, 136, 195);    
+    background: var(--add-item-bg);
+    color: var(--add-item-color); 
     }
     .draft-btn{
-        background: rgb(54, 59, 83);
-        color: rgb(136, 142, 176);
+        background: var(--header-bg);
+        color: var(--draft-color);
+    }
+    .save-btn{
+        background: var(--purple);
+        color:#fff;
     }
 }
 
@@ -351,7 +360,7 @@ h3{
     justify-content:flex-end;
     gap:20px;
     .save-changes{
-        background: rgb(124, 93, 250);
+        background: var(--purple);
         color:#fff;
     }
 }

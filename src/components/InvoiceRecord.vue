@@ -45,16 +45,23 @@ export default {
     components: { StatusBadge }
 }
 </script>
+<style scoped>
+    .record{
+        background:var(--invoice-bg);
+    }
+    .record:hover{
+        outline:1px solid var(--purple)
+    }
+    .invoice_id >span{
+        color:var(--text-bold);
+    }
+</style>
 
 <style scoped lang="scss">
 .record{
-    background: #fff;
     padding:1rem 1.5rem;
     border-radius: 10px;
-    color:rgb(136, 142, 176);
-    &:hover{
-        outline:1px solid #7c5dfa;
-    }
+    color:var(--text);
 } 
 .arrow{
     display:none
@@ -71,9 +78,6 @@ export default {
     margin-bottom: 20px;
     font-weight: bold;
     font-size: 0.9rem;
-    >span{
-        color:rgb(12, 14, 22);
-    }
 }
 .due_date{
     grid-column: 1;
@@ -87,7 +91,7 @@ export default {
 .due_total{
     grid-column: 1;
     grid-row:3;
-    color:rgb(12, 14, 22);
+    color:var(--text-bold);
     font-size:1.3rem;
     font-weight:500;
 }

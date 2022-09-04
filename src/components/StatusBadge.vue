@@ -16,13 +16,13 @@ export default {
     setup(props){
         const badgeStyle = computed(()=>{
             if (props.status == 'paid'){
-                const style =  {'--badgeBackground': '#F4FDF9' ,'--badgeText': '#32D69F'}
+                const style =  {'--badgeBackground': 'rgba(51, 214, 159, 0.06)' ,'--badgeText': '#32D69F'}
                 return style
             } else if (props.status == 'pending'){
-                const style =  {'--badgeBackground': '#FFF8F1' ,'--badgeText': '#FF8F00'}
+                const style =  {'--badgeBackground': 'rgba(255, 143, 0, 0.06)' ,'--badgeText': '#FF8F00'}
                 return style
             } else if (props.status == 'draft'){
-                const style =  {'--badgeBackground': '#F3F4F5' ,'--badgeText': '#373B53'}
+                const style =  {'--badgeBackground': 'rgba(223, 227, 250, 0.06)' ,'--badgeText': '#484d64'}
                 return style
             }
         })
@@ -44,6 +44,10 @@ export default {
         align-items: center;
         height:100%;
         width:100px;
+    }
+    p{
+        text-transform: capitalize;
+        font-weight:400;
     }
     p::before{
             content:"";

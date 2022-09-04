@@ -4,9 +4,9 @@
         <img src="../assets/logo.svg" alt="">
     </div>
     <div>
-        <div class="theme-toggle">
-            <img src="../assets/icon-moon.svg" alt="">
-            <!--<img src="../assets/icon-sun.svg" alt="">-->
+        <div class="theme-toggle" @click="toggleTheme">
+            <img v-if="store.darkMode" src="../assets/icon-sun.svg" alt="">
+            <img v-else src="../assets/icon-moon.svg" alt="">
         </div>
         <div class="profile">
             <img class="img-fluid" src="../assets/image-avatar.jpeg" alt="avatar">
@@ -16,15 +16,18 @@
 </template>
 
 <script setup>
+    //import { defineEmits } from 'vue';
+    import { ThemeToggle } from '@/store/theme';
+    //const emit = defineEmits(['toggleClicked']);
+    const store = ThemeToggle();
+    const { toggleTheme } = store
 </script>
 
 <style lang="scss" scoped >
-$purple: #7c5dfa;
-$purple-light:#9277ff;
 header{
     display: flex;
     height:5rem;
-    background: #373B53;
+    background: var(--header-bg);
     justify-content: space-between;
     position: fixed;
     left:0;
@@ -38,7 +41,7 @@ header{
     display:flex;
     justify-content: center;
     align-items: center;
-    background:$purple;
+    background:var(--purple);
     border-radius: 0px 20px 20px 0px;
 }
 
@@ -50,7 +53,7 @@ header{
 .logo::after{
     content:"";
     position:absolute;
-    background: $purple-light;
+    background: var(--purple-light);
     border-radius:20px 0px;
     width:100%;
     height:50%;
