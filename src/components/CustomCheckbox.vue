@@ -1,12 +1,17 @@
 <template>
   <div class="radio">
-    <input type="radio" name="filter">
+    <input type="radio" name="filter" :id="type" :checked="type == 'all'">
     <span class="custom-radio"></span>
   </div>
 </template>
 
 <script>
 export default {
+  props:{
+    type:{
+      type:String,
+    }
+  }
 
 }
 </script>

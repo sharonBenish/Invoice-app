@@ -8,11 +8,11 @@
         <button class="filter-btn">
             <p @click="openDropDown">Filter <span class="extra-btn-text">by status</span></p>
             <span><img src="../assets/icon-arrow-down.svg" alt="" @click="openDropDown" :class="showDropDown && 'open'" /></span>
-            <div class="drop-down" v-if="showDropDown">
-                <div class="option"><CustomCheckbox /> All</div>
-                <div class="option"><CustomCheckbox /> Paid</div>
-                <div class="option"><CustomCheckbox /> Pending</div>
-                <div class="option"><CustomCheckbox /> Draft</div>
+            <div class="drop-down" v-show="showDropDown" @change="check">
+                <div class="option"><CustomCheckbox :type="'all'" /> All</div>
+                <div class="option"><CustomCheckbox :type="'paid'" /> Paid</div>
+                <div class="option"><CustomCheckbox :type="'pending'" /> Pending</div>
+                <div class="option"><CustomCheckbox :type="'draft'" /> Draft</div>
             </div>
         </button>
         <button class="new-invoice-btn" @click="newInvoiceClicked">
@@ -36,16 +36,19 @@ export default {
             ctx.emit('newInvoiceClicked')
         }
         const showDropDown = ref(false);
-        const openDropDown = (event)=>{
-            console.log(event.target)
+        const openDropDown = ()=>{
             showDropDown.value = !showDropDown.value;
+        }
+        const check = (event)=>{
+            ctx.emit('checked', event.target.id)
         }
 
         return{
             store,
             showDropDown,
             newInvoiceClicked,
-            openDropDown
+            openDropDown,
+            check
         }
     }
 }
