@@ -28,6 +28,10 @@ export const InvoiceStore = defineStore("invoice", {
         },
         deleteInvoice(id){
             this.invoiceData = this.invoiceData.filter(invoice => invoice.id !== id);
+        },
+        saveChanges(id, changes){
+            const indx = this.invoiceData.findIndex(invoice => invoice.id == id);
+            this.invoiceData[indx] = changes;
         }
     }
 })
