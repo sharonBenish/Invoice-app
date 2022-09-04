@@ -25,7 +25,11 @@ export default {
       invoiceList.value = invoiceData
       
       const filter = (type)=>{
-        invoiceList.value = store.filterByStatus(type);
+        if (type == 'all'){
+          invoiceList.value = invoiceData;
+        }else{
+          invoiceList.value = store.filterByStatus(type);
+        }
       }
       return{
         invoiceList,
