@@ -89,7 +89,7 @@ export default {
     grid-row:3;
     color:rgb(12, 14, 22);
     font-size:1.3rem;
-    font-weight:bold;
+    font-weight:500;
 }
 .status{
     grid-column: 2;
