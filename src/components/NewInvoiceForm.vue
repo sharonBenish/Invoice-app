@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="form_container">
-        <h2>Create Invoice</h2>
+        <h2 v-if="id">Edit <span>#</span>{{id}}</h2>
+        <h2 v-else>Create Invoice</h2>
         <div class="form">
             <h3>Bill From</h3>
             <div>
@@ -92,7 +93,11 @@
             </div>
             <button class="add-item" @click="addNewItem">+ Add New Item</button>
         </div>
-        <div class="button-group">
+        <div v-if="id" class="button-group edit-mode">
+            <button class="discard-btn" @click="discardClicked">Edit</button>
+            <button class="save-changes" @click="saveChanges">Save Changes</button>
+        </div>
+        <div v-else class="button-group">
             <button class="discard-btn" @click="discardClicked">Discard</button>
             <button class="draft-btn" @click="saveAsDraft">Save as Draft</button>
             <button class="save-btn" @click="saveInvoice">Save & Send</button>
@@ -110,6 +115,9 @@ export default {
     props:{
         isOpen:{
             type:Boolean
+        },
+        id:{
+            type:String
         }
     },
     setup(props,ctx){
@@ -139,6 +147,10 @@ export default {
             total:null
         });
         const invoiceItemsNumber = ref(0);
+        if (props.id){
+            formDetails.value= store.getInvoiceById(props.id);
+            invoiceItemsNumber.value = formDetails.value.items.length
+        }
         
         const addNewItem = ()=>{
             invoiceItemsNumber.value ++;
@@ -203,6 +215,12 @@ export default {
         const discardClicked = ()=>{
             ctx.emit('discardClicked')
         }
+
+        const saveChanges = ()=>{
+            formDetails.value.total = invoiceTotal.value;
+            store.saveChanges();
+            ctx.emit('discardClicked')
+        }
         return{
             todayDate,
             getTotal,
@@ -213,6 +231,7 @@ export default {
             formDetails,
             saveInvoice,
             saveAsDraft,
+            saveChanges
         }
     }
 }
@@ -226,6 +245,13 @@ export default {
     left:0;
     right:0;
     bottom:0;
+}
+
+h2{
+    font-weight:500;
+}
+h2 > span{
+    color:rgb(126, 136, 195);
 }
 
 h3{
@@ -309,6 +335,7 @@ h3{
     outline:0;
     border:0;
     border-radius: 2rem;
+    cursor:pointer;
     }
     .discard-btn{
     background: rgb(249, 250, 254);
@@ -317,6 +344,15 @@ h3{
     .draft-btn{
         background: rgb(54, 59, 83);
         color: rgb(136, 142, 176);
+    }
+}
+
+.button-group.edit-mode{
+    justify-content:flex-end;
+    gap:20px;
+    .save-changes{
+        background: rgb(124, 93, 250);
+        color:#fff;
     }
 }
 
@@ -356,7 +392,7 @@ h3{
     }
     h2{
         margin:3rem 0;
-        font-size:2rem;
+        font-size:1.8rem;
     }
     .form >div{
         .city, .postcode, .country{
