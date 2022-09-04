@@ -1,5 +1,6 @@
 <template>
-    <div class="container">
+    <div class="invoice-container" :class="isInvoiceFormOpen && 'formOpen'">
+        <NewInvoiceForm :id="id" @discardClicked="isInvoiceFormOpen = false" v-if="isInvoiceFormOpen" />
         <button class="back" @click="goBack">
             <img src="../assets/icon-arrow-left.svg" alt="">
             Go back
@@ -13,7 +14,7 @@
                     </div>
                 </div>
                 <div>
-                    <button class="edit">Edit</button>
+                    <button class="edit" @click="isInvoiceFormOpen = true">Edit</button>
                     <button class="delete" @click="deleteClicked">Delete</button>
                     <button class="mark" v-if="info.status != 'paid'" @click="markAsPaid">Mark As Paid</button>
                 </div>
@@ -89,6 +90,7 @@ import { InvoiceStore } from '@/store/store';
 import { ref } from '@vue/runtime-core';
 import { useRoute, useRouter } from 'vue-router'
 import StatusBadge from '@/components/StatusBadge.vue';
+import NewInvoiceForm from '@/components/NewInvoiceForm.vue';
 export default {
     setup(props, ctx) {
         const route = useRoute();
@@ -109,24 +111,32 @@ export default {
             store.markAsPaid(id.value)
         }
 
+        const isInvoiceFormOpen = ref(false);
+
         return {
+            id,
             info,
+            isInvoiceFormOpen,
             deleteClicked,
             goBack,
             markAsPaid
         };
     },
-    components: { StatusBadge }
+    components: { StatusBadge, NewInvoiceForm }
 }
 </script>
 
 <style scoped lang="scss">
+.invoice-container.formOpen{
+  max-height: 100vh;
+  overflow: hidden;
+}
 .test{
     position:fixed;
     top:0;
     left:0;
 }
-.container{
+.invoice-container{
     max-width:700px;
     .info-container{
         .header{
@@ -336,7 +346,7 @@ table{
 }
 
 @media (min-width:1025px) {
-    .container{
+    .invoice-container{
         .info-container{
             .header{
                 padding:1rem 1.5rem;
