@@ -11,7 +11,9 @@ export const InvoiceStore = defineStore("invoice", {
         invoiceCount:(state)=>{
             return state.invoiceData.length
         },
-
+        filterByStatus:(state)=>{
+            return (status)=> state.invoiceData.filter((invoice)=> invoice.status === status)
+        }
     },
     actions:{
         loadInvoices(data){
