@@ -1,6 +1,6 @@
 <template>
   <div class="record" @click="goToRecordInfo()">
-    <div class="invoice_id">#{{invoice.id}}</div>
+    <div class="invoice_id">#<span>{{invoice.id}}</span></div>
     <div class="due_date">Due {{formatDate}}</div>
     <div class="client_name">{{invoice.clientName}}</div>
     <div class="due_total">${{invoice.total}}</div>
@@ -49,8 +49,9 @@ export default {
 <style scoped lang="scss">
 .record{
     background: #fff;
-    padding:1.5rem 1.8rem;
+    padding:1rem 1.5rem;
     border-radius: 10px;
+    color:rgb(136, 142, 176);
     &:hover{
         outline:1px solid #7c5dfa;
     }
@@ -68,6 +69,11 @@ export default {
     grid-column: 1;
     grid-row:1;
     margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    >span{
+        color:rgb(12, 14, 22);
+    }
 }
 .due_date{
     grid-column: 1;
@@ -81,6 +87,9 @@ export default {
 .due_total{
     grid-column: 1;
     grid-row:3;
+    color:rgb(12, 14, 22);
+    font-size:1.3rem;
+    font-weight:bold;
 }
 .status{
     grid-column: 2;
