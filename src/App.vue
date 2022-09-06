@@ -96,7 +96,7 @@ main{
     --form-text:#7e88c3;
     --form-text-bold:#888eb0;
     --form-field-border:#dfe3fa;
-    --add-item-bg:#f9fafe;
+    --add-item-bg:#DFE3FA;
     --add-item-color: #7e88c3;
     --draft-color: #888eb0;
     --total-bg:#373B53;

@@ -5,54 +5,54 @@
         <h2 v-else>Create Invoice</h2>
         <div class="form">
             <h3>Bill From</h3>
+            <pre>{{isValid}}</pre>
             <div>
                 <div class="address">
                     <label for="from-address">Street Address</label>
-                    <input type="text" id="from-address" v-model="formDetails.
-                    senderAddress.street">
+                    <InputField v-model="formDetails.senderAddress.street"/>
                 </div>
                 <div class="city">
                     <label for="from-city">City</label>
-                    <input type="text" id="from-city" v-model="formDetails.senderAddress.city">
+                    <InputField v-model="formDetails.senderAddress.city" />
                 </div>
                 <div class="postcode">
                     <label for="from-postcode">Post Code</label>
-                    <input type="text" id="from-postcode" v-model="formDetails.senderAddress.postCode">
+                    <InputField v-model="formDetails.senderAddress.postCode" />
                 </div>
                 <div class="country">
                     <label for="from-country">Country</label>
-                    <input type="text" id="from-country" v-model="formDetails.senderAddress.country">
+                    <InputField v-model="formDetails.senderAddress.country" />
                 </div>
             </div>
             <h3>Bill To</h3>
             <div>
                 <div class="name">
                     <label for="client-name">Client's Name</label>
-                    <input type="text" id="client-name" v-model="formDetails.clientName">
+                    <InputField v-model="formDetails.clientName" />
                 </div>
                 <div class="email">
                     <label for="">Client's Email</label>
-                    <input type="text" id="client-email" placeholder="e.g. email@example.com" v-model="formDetails.clientEmail">
+                    <InputField v-model="formDetails.clientEmail" :type="'email'" class="email" />
                 </div>
                 <div class="address">
                     <label for="to-address">Street Address</label>
-                    <input type="text" id="to-address" v-model="formDetails.clientAddress.street">
+                    <InputField v-model="formDetails.clientAddress.street" />
                 </div>
                 <div class="city">
                     <label for="to-city">City</label>
-                    <input type="text" id="to-city" v-model="formDetails.clientAddress.city">
+                    <InputField v-model="formDetails.clientAddress.city" />
                 </div>
                 <div class="postcode">
                     <label for="to-postcode">Post Code</label>
-                    <input type="text" id="to-postcode" v-model="formDetails.clientAddress.postCode">
+                    <InputField v-model="formDetails.clientAddress.postCode" />
                 </div>
                 <div class="country">
                     <label for="to-country">Country</label>
-                    <input type="text" id="to-country" v-model="formDetails.clientAddress.country">
+                    <InputField v-model="formDetails.clientAddress.country" />
                 </div>
                 <div class="invoice-date">
                     <p class="label">Invoice Date</p>
-                    <p class="input">{{todayDate}}</p>
+                    <p class="input">{{todayDate}}<span><img src="../assets/icon-calendar.svg" alt=""></span></p>
                 </div>
                 <div class="payment-terms">
                     <p class="label">Payment Terms</p>
@@ -65,33 +65,37 @@
                 </div>
                 <div>
                     <label for="description">Description</label>
-                    <input type="text" id="description" placeholder="e.g. Graphic Design Service" v-model="formDetails.description"> 
+                    <InputField v-model="formDetails.description" />
                 </div>
             </div>
             <h3 class="items-heading">Item List</h3>
             <div class="invoice-items" v-for="(i,index) in invoiceItemsNumber" :key="i" >
                 <div class="item-name">
                     <label>Item name</label>
-                    <input type="text" v-model="formDetails.items[index].name">
+                    <InputField v-model="formDetails.items[index].name" />
                 </div>
                 <div class="items">
                     <div class="qty">
                         <label>Qty</label>
-                        <input type="number" v-model="formDetails.items[index].quantity" @input="getTotal(index)">
+                        <InputField v-model="formDetails.items[index].quantity" @input="getTotal(index)" />
                     </div>
                     <div class="price">
                         <label>Price</label>
-                        <input type="number" v-model="formDetails.items[index].price" @input="getTotal(index)">
+                        <InputField v-model="formDetails.items[index].price" @input="getTotal(index)" />
                     </div>
                     <div class="total">
                         <label>Total</label>
                         <input type="number" readonly v-model="formDetails.items[index].total">
-                        <!--<div>{{getTotal(index)}}</div>-->
                     </div>
-                    <img src="../assets/icon-delete.svg" alt="" @click="deleteItem(index)">
+                    <svg width="13" height="16" xmlns="http://www.w3.org/2000/svg" @click="deleteItem(index)"><path d="M11.583 3.556v10.666c0 .982-.795 1.778-1.777 1.778H2.694a1.777 1.777 0 01-1.777-1.778V3.556h10.666zM8.473 0l.888.889h3.111v1.778H.028V.889h3.11L4.029 0h4.444z" fill="#888EB0" fill-rule="nonzero"/></svg>
                 </div>
             </div>
             <button class="add-item" @click="addNewItem">+ Add New Item</button>
+            <div class="errors">
+                <p ref="emptyField">- All fields must be filled.</p>
+                <p ref="noItem">- An item must be added.</p>
+                <p ref="invalidEmail">- Invalid email.</p>
+            </div>
         </div>
         <div v-if="id" class="button-group edit-mode">
             <button class="discard-btn" @click="discardClicked">Cancel</button>
@@ -103,7 +107,7 @@
             <button class="save-btn" @click="saveInvoice">Save & Send</button>
         </div>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -111,117 +115,146 @@ import { nanoid } from 'nanoid';
 import { InvoiceStore } from '@/store/store';
 import { ref } from '@vue/reactivity';
 import { computed } from '@vue/runtime-core';
+import InputField from './InputField.vue';
 export default {
-    props:{
-        isOpen:{
-            type:Boolean
+    props: {
+        isOpen: {
+            type: Boolean
         },
-        id:{
-            type:String
+        id: {
+            type: String
         }
     },
-    setup(props,ctx){
+    setup(props, ctx) {
         const store = InvoiceStore();
         const formDetails = ref({
-            id: '',
-            createdAt: '',
-            paymentDue: '',
-            status:"pending",
-            senderAddress:{
-                street:"",
-                city:"",
-                postCode:"",
-                country:""
+            id: "",
+            createdAt: "",
+            paymentDue: "",
+            status: "pending",
+            senderAddress: {
+                street: "",
+                city: "",
+                postCode: "",
+                country: ""
             },
-            clientAddress:{
-                street:"",
-                city:"",
-                postCode:"",
-                country:""
+            clientAddress: {
+                street: "",
+                city: "",
+                postCode: "",
+                country: ""
             },
-            clientName:"",
-            clientEmail:"",
-            paymentTerms:1,
-            description:"",
-            items:[],
-            total:null
+            clientName: "",
+            clientEmail: "",
+            paymentTerms: 1,
+            description: "",
+            items: [],
+            total: null
         });
         const invoiceItemsNumber = ref(0);
-        if (props.id){
-            formDetails.value= store.getInvoiceById(props.id);
-            invoiceItemsNumber.value = formDetails.value.items.length
+        if (props.id) {
+            formDetails.value = store.getInvoiceById(props.id);
+            invoiceItemsNumber.value = formDetails.value.items.length;
         }
-        
-        const addNewItem = ()=>{
-            invoiceItemsNumber.value ++;
-            console.log(formDetails.value.items)
+        const addNewItem = () => {
+            invoiceItemsNumber.value++;
+            console.log(formDetails.value.items);
             formDetails.value.items.push({
-                name:"",
-                quantity:null,
-                price:null,
-                total:null,
-            })
-        }
-        const deleteItem = (index)=>{
+                name: "",
+                quantity: null,
+                price: null,
+                total: null,
+            });
+        };
+        const deleteItem = (index) => {
             console.log(index);
-            formDetails.value.items.splice(index,1);
-            invoiceItemsNumber.value -=1;
-        }
-
-        const todayDate = computed(()=>{
+            formDetails.value.items.splice(index, 1);
+            invoiceItemsNumber.value -= 1;
+        };
+        const todayDate = computed(() => {
             const date = new Date;
-            const options = {month: 'short', day: 'numeric', year: 'numeric'};
-            return date.toLocaleDateString('en-US', options)
-        })
-        const getTotal = (indx)=>{
+            const options = { month: "short", day: "numeric", year: "numeric" };
+            return date.toLocaleDateString("en-US", options);
+        });
+        const getTotal = (indx) => {
             const item = formDetails.value.items[indx];
             const qty = item.quantity;
             const price = item.price;
             formDetails.value.items[indx].total = qty * price;
-        }
-
-        const invoiceTotal = computed(()=>{
-            return formDetails.value.items.map(item => item.total).reduce((a,b)=> a+b, 0)
-        })
-
-        const addToInvoiceList=()=>{
+        };
+        const invoiceTotal = computed(() => {
+            return formDetails.value.items.map(item => item.total).reduce((a, b) => a + b, 0);
+        });
+        const addToInvoiceList = () => {
             const date = new Date();
-            const paymentDate= new Date();
+            const paymentDate = new Date();
             paymentDate.setDate(date.getDate() + formDetails.value.paymentTerms);
-            const paymentDue = paymentDate.toISOString().substring(0,10);
-            const createdAt = date.toISOString().substring(0,10);
-
+            const paymentDue = paymentDate.toISOString().substring(0, 10);
+            const createdAt = date.toISOString().substring(0, 10);
             console.log(createdAt);
             console.log(paymentDue);
-
             formDetails.value.id = nanoid(6).toUpperCase();
             formDetails.value.createdAt = createdAt;
             formDetails.value.paymentDue = paymentDue;
             formDetails.value.total = invoiceTotal.value;
-            console.log(formDetails.value)
-            
-            store.addNewInvoice(formDetails.value)
-        }
-
-        const saveInvoice = ()=>{
-            addToInvoiceList()
-            ctx.emit('discardClicked')
-        }
-
-        const saveAsDraft = ()=>{
-            formDetails.value.status= 'draft';
-            saveInvoice()
-        }
-        const discardClicked = ()=>{
-            ctx.emit('discardClicked')
-        }
-
-        const saveChanges = ()=>{
+            console.log(formDetails.value);
+            store.addNewInvoice(formDetails.value);
+        };
+        
+        const saveInvoice = (event) => {
+            isValid.value = true;
+            emptyField.value.style.display = 'none';
+            invalidEmail.value.style.display = 'none';
+            noItem.value.style.display ='none';
+            formValidation(event);
+            if(isValid.value){
+                addToInvoiceList();
+                ctx.emit("discardClicked");
+            }
+        };
+        const saveAsDraft = () => {
+            formDetails.value.status = "draft";
+            saveInvoice();
+        };
+        const discardClicked = () => {
+            ctx.emit("discardClicked");
+        };
+        const saveChanges = () => {
             formDetails.value.total = invoiceTotal.value;
             store.saveChanges();
-            ctx.emit('discardClicked')
+            ctx.emit("discardClicked");
+        };
+
+        //FORM VALIDATION
+
+        const invalidEmail = ref(null);
+        const noItem = ref(null);
+        const emptyField = ref(null);
+
+        const isValid = ref(true);
+
+        const formValidation = (event)=>{
+            const inputs = event.target.parentNode.parentNode.querySelectorAll('input');
+            inputs.forEach(input=>{
+                input.focus();
+                input.blur();
+                if (input.classList.value.includes('invalid')){
+                    isValid.value = false;
+                    if(input.value.trim() ==""){
+                        emptyField.value.style.display = 'block';
+                    }
+                    if(input.classList.value.includes('email')){
+                        invalidEmail.value.style.display = 'block';
+                    } 
+                }
+            })
+            if (formDetails.value.items.length == 0){
+                isValid.value = false;
+                noItem.value.style.display ='block';
+            }
         }
-        return{
+
+        return {
             todayDate,
             getTotal,
             discardClicked,
@@ -231,9 +264,14 @@ export default {
             formDetails,
             saveInvoice,
             saveAsDraft,
-            saveChanges
-        }
-    }
+            saveChanges,
+            invalidEmail,
+            noItem,
+            emptyField,
+            isValid
+        };
+    },
+    components: { InputField }
 }
 </script>
 
@@ -291,6 +329,9 @@ h3{
     .postcode, .city, .invoice-date, .payment-terms{
         width:calc(50% - 10px);
     }
+    .payment-terms .input:hover{
+        cursor:pointer;
+    }
     .input{
         font-weight:bold;
         font-size:0.85rem;
@@ -310,6 +351,9 @@ h3{
             color:var(--form-text-bold);
         }
     }
+    input.invalid{
+        border-color: red;
+    }
     
 }
 
@@ -328,6 +372,9 @@ h3{
     border:0;
     border-radius: 10rem;
     margin-bottom:20px;
+    &:hover{
+        cursor: pointer;
+    }
 }
 
 .button-group{
@@ -384,6 +431,28 @@ h3{
     }
     .total{
         width:30%;
+    }
+    svg:hover{
+        cursor:pointer;
+        >path{
+            fill:rgb(236, 87, 87);
+        }
+    }
+}
+
+.invoice-date >p{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+}
+.errors{
+    display:block !important;
+    color:rgb(236, 87, 87);
+    p{
+        margin-bottom:6px;
+        font-size:small;
+        display:none;
+        font-weight:500;
     }
 }
 
