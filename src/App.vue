@@ -33,7 +33,7 @@ const deleteInvoice = ()=>{
   showDeleteModal.value = false;
   setTimeout(()=>{
     router.go(-1);
-  }, 1500)
+  }, 500)
 }
 
 const theme = ThemeToggle();

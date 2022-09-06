@@ -3,7 +3,7 @@
     <InvoiceOptions @newInvoiceClicked="isInvoiceFormOpen = true" @checked="filter" />
     <div class="invoice-list">
       <InvoiceRecord v-for="(invoice, index) in invoiceList" :key="index" :invoice="invoice" />
-      <NewInvoiceForm v-if="isInvoiceFormOpen" @discardClicked="isInvoiceFormOpen = false" />
+      <NewInvoiceForm v-if="isInvoiceFormOpen" @closeForm="isInvoiceFormOpen = false" />
     </div>
   </div>
 </template>

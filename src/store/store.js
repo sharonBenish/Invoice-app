@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export const InvoiceStore = defineStore("invoice", {
     state: ()=>({
-        invoiceData:[],
+        invoiceData:[]
     }),
     getters:{
         getInvoiceById:(state)=>{
@@ -34,6 +34,7 @@ export const InvoiceStore = defineStore("invoice", {
         saveChanges(id, changes){
             const indx = this.invoiceData.findIndex(invoice => invoice.id == id);
             this.invoiceData[indx] = changes;
+            console.log(this.invoiceData)
         }
     }
 })
