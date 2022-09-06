@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="form_container">
+    <div ref="form" class="form_container">
         <h2 v-if="id">Edit <span>#</span>{{id}}</h2>
         <h2 v-else>Create Invoice</h2>
         <div class="form">
@@ -97,11 +97,11 @@
             </div>
         </div>
         <div v-if="id" class="button-group edit-mode">
-            <button class="discard-btn" @click="cancelChanges">Cancel</button>
+            <button class="discard-btn" @click="closeForm">Cancel</button>
             <button class="save-changes" @click="saveChanges">Save Changes</button>
         </div>
         <div v-else class="button-group">
-            <button class="discard-btn" @click="discardClicked">Discard</button>
+            <button class="discard-btn" @click="closeForm">Discard</button>
             <button class="draft-btn" @click="saveAsDraft">Save as Draft</button>
             <button class="save-btn" @click="saveInvoice">Save & Send</button>
         </div>
@@ -126,7 +126,7 @@ export default {
     },
     setup(props, ctx) {
         const store = InvoiceStore();
-        //const initialState = ref();
+        const form = ref();
         const formDetails = ref({
             id: "",
             createdAt: "",
@@ -213,15 +213,21 @@ export default {
             formValidation(event);
             if(isValid.value){
                 addToInvoiceList();
-                ctx.emit("closeForm");
+                //ctx.emit("closeForm");
+                closeForm();
             }
         };
         const saveAsDraft = () => {
             formDetails.value.status = "draft";
             addToInvoiceList();
-            ctx.emit("closeForm");
+            //ctx.emit("closeForm");
+            closeForm();
         };
-        const discardClicked = () => {
+
+        const closeForm = () => {
+            form.value.classList.add('out');
+            form.value.parentNode.classList.add('out');
+            //event.target.parentNode.parentNode.classList.add('out');
             ctx.emit("closeForm");
         };
         const saveChanges = (event) => {
@@ -230,14 +236,17 @@ export default {
             if(isValid.value){
                 formDetails.value.total = invoiceTotal.value;
                 store.saveChanges(props.id, formDetails.value);
-                ctx.emit("closeForm");
+                //ctx.emit("closeForm");
+                closeForm()
             }
         };
 
-        const cancelChanges = ()=>{
-            ctx.emit("closeForm");
-        }
+        //const cancelChanges = ()=>{
+            //ctx.emit("closeForm");
+        //};
 
+        
+        
         //FORM VALIDATION
 
         const invalidEmail = ref(null);
@@ -270,7 +279,7 @@ export default {
         return {
             todayDate,
             getTotal,
-            discardClicked,
+            //discardClicked,
             invoiceItemsNumber,
             addNewItem,
             deleteItem,
@@ -281,10 +290,12 @@ export default {
             invalidEmail,
             noItem,
             emptyField,
-            cancelChanges
+            //cancelChanges,
+            closeForm,
+            form
         };
     },
-    components: { InputField}
+    components: { InputField }
 }
 </script>
 
@@ -316,9 +327,26 @@ $animation-duration: 0.35s;
     from {transform: translateX(-100%)}
     to {transform:translateX(0)}
 }
+@keyframes slideout {
+    from {transform: translateX(0)}
+    to {transform:translateX(-100%)}
+}
 @keyframes colorFadeIn {
     from {opacity: 0;}
     to {opacity: 1}
+}
+@keyframes colorFadeOut {
+    from {opacity: 1};
+    to {opacity:0}
+}
+
+.form_container.out{
+    animation-name:slideout;
+    animation-duration: $animation-duration;
+}
+.container.out{
+    animation-name:colorFadeOut;
+    animation-duration: $animation-duration;
 }
 
 h2{

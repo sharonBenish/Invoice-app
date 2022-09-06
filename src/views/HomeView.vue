@@ -3,7 +3,7 @@
     <InvoiceOptions @newInvoiceClicked="isInvoiceFormOpen = true" @checked="filter" />
     <div class="invoice-list">
       <InvoiceRecord v-for="(invoice, index) in invoiceList" :key="index" :invoice="invoice" />
-      <NewInvoiceForm v-if="isInvoiceFormOpen" @closeForm="isInvoiceFormOpen = false" />
+      <NewInvoiceForm v-if="isInvoiceFormOpen" @closeForm="closeForm" />
     </div>
   </div>
 </template>
@@ -31,10 +31,16 @@ export default {
           invoiceList.value = store.filterByStatus(type);
         }
       }
+      const closeForm = ()=>{
+        setTimeout(()=>{
+          isInvoiceFormOpen.value = false
+        }, 340)
+      }
       return{
         invoiceList,
         isInvoiceFormOpen,
-        filter
+        filter,
+        closeForm
       }
     }
 }

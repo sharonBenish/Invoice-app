@@ -1,6 +1,6 @@
 <template>
     <div class="invoice-container" :class="isInvoiceFormOpen && 'formOpen'">
-        <NewInvoiceForm :id="id" @closeForm="isInvoiceFormOpen = false" v-if="isInvoiceFormOpen" />
+        <NewInvoiceForm :id="id" @closeForm="closeForm" v-if="isInvoiceFormOpen" />
         <button class="back" @click="goBack">
             <img src="../assets/icon-arrow-left.svg" alt="">
             Go back
@@ -112,6 +112,11 @@ export default {
             store.markAsPaid(id.value)
         }
         const isInvoiceFormOpen = ref(false);
+        const closeForm = ()=>{
+            setTimeout(()=>{
+                isInvoiceFormOpen.value = false
+            }, 340)
+        }
 
         return {
             id,
@@ -120,7 +125,8 @@ export default {
             deleteClicked,
             goBack,
             markAsPaid,
-            getInvoiceById
+            getInvoiceById,
+            closeForm
         };
     },
     components: { StatusBadge, NewInvoiceForm }
