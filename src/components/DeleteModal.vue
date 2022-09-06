@@ -62,6 +62,7 @@ h2{
     font-size: 1.2rem;
     max-width:500px;
     line-height: 2rem;
+    width: 80%;
 }
 
 .button-group{
