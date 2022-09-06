@@ -5,7 +5,6 @@
         <h2 v-else>Create Invoice</h2>
         <div class="form">
             <h3>Bill From</h3>
-            <pre>{{isValid}}</pre>
             <div>
                 <div class="address">
                     <label for="from-address">Street Address</label>
@@ -77,11 +76,11 @@
                 <div class="items">
                     <div class="qty">
                         <label>Qty</label>
-                        <InputField v-model="formDetails.items[index].quantity" @input="getTotal(index)" />
+                        <InputField v-model="formDetails.items[index].quantity" @input="getTotal(index)" :type="'number'" />
                     </div>
                     <div class="price">
                         <label>Price</label>
-                        <InputField v-model="formDetails.items[index].price" @input="getTotal(index)" />
+                        <InputField v-model="formDetails.items[index].price" @input="getTotal(index)" :type="'number'" />
                     </div>
                     <div class="total">
                         <label>Total</label>
@@ -98,7 +97,7 @@
             </div>
         </div>
         <div v-if="id" class="button-group edit-mode">
-            <button class="discard-btn" @click="discardClicked">Cancel</button>
+            <button class="discard-btn" @click="cancelChanges">Cancel</button>
             <button class="save-changes" @click="saveChanges">Save Changes</button>
         </div>
         <div v-else class="button-group">
@@ -127,6 +126,7 @@ export default {
     },
     setup(props, ctx) {
         const store = InvoiceStore();
+        //const initialState = ref();
         const formDetails = ref({
             id: "",
             createdAt: "",
@@ -151,9 +151,9 @@ export default {
             items: [],
             total: null
         });
-        const invoiceItemsNumber = ref(0);
+        const invoiceItemsNumber = ref(0); 
         if (props.id) {
-            formDetails.value = store.getInvoiceById(props.id);
+            formDetails.value = JSON.parse(JSON.stringify(store.getInvoiceById(props.id)));
             invoiceItemsNumber.value = formDetails.value.items.length;
         }
         const addNewItem = () => {
@@ -200,30 +200,43 @@ export default {
             console.log(formDetails.value);
             store.addNewInvoice(formDetails.value);
         };
-        
-        const saveInvoice = (event) => {
+
+        const resetValidationVariables = ()=>{
             isValid.value = true;
             emptyField.value.style.display = 'none';
             invalidEmail.value.style.display = 'none';
             noItem.value.style.display ='none';
+        };
+
+        const saveInvoice = (event) => {
+            resetValidationVariables();
             formValidation(event);
             if(isValid.value){
                 addToInvoiceList();
-                ctx.emit("discardClicked");
+                ctx.emit("closeForm");
             }
         };
         const saveAsDraft = () => {
             formDetails.value.status = "draft";
-            saveInvoice();
+            addToInvoiceList();
+            ctx.emit("closeForm");
         };
         const discardClicked = () => {
-            ctx.emit("discardClicked");
+            ctx.emit("closeForm");
         };
-        const saveChanges = () => {
-            formDetails.value.total = invoiceTotal.value;
-            store.saveChanges();
-            ctx.emit("discardClicked");
+        const saveChanges = (event) => {
+            resetValidationVariables();
+            formValidation(event);
+            if(isValid.value){
+                formDetails.value.total = invoiceTotal.value;
+                store.saveChanges(props.id, formDetails.value);
+                ctx.emit("closeForm");
+            }
         };
+
+        const cancelChanges = ()=>{
+            ctx.emit("closeForm");
+        }
 
         //FORM VALIDATION
 
@@ -268,14 +281,15 @@ export default {
             invalidEmail,
             noItem,
             emptyField,
-            isValid
+            cancelChanges
         };
     },
-    components: { InputField }
+    components: { InputField}
 }
 </script>
 
 <style scoped lang="scss">
+$animation-duration: 0.35s;
 .container{
     position:absolute;
     top:5rem;
@@ -283,6 +297,28 @@ export default {
     left:0;
     right:0;
     bottom:0;
+    animation-name:colorFadeIn;
+    animation-duration: $animation-duration;
+}
+
+.form_container{
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:20px;
+    background: var(--background);
+    animation-name:slidein;
+    animation-duration: $animation-duration;
+}
+
+@keyframes slidein {
+    from {transform: translateX(-100%)}
+    to {transform:translateX(0)}
+}
+@keyframes colorFadeIn {
+    from {opacity: 0;}
+    to {opacity: 1}
 }
 
 h2{
@@ -297,15 +333,6 @@ h3{
     font-size: 1rem;
     line-height: 1.125;
     color: var(--purple);
-}
-
-.form_container{
-    height:100%;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding:20px;
-    background: var(--background);
 }
 
 .form{
@@ -352,7 +379,10 @@ h3{
         }
     }
     input.invalid{
-        border-color: red;
+        border-color: #ec5757;
+    }
+    label.invalid{
+        color:#ec5757;
     }
     
 }

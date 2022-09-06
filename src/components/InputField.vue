@@ -1,40 +1,36 @@
 <template>
-    <!-- <input type="text" @input="$emit('update:modelValue', $event.target.value)"> -->
-    <input type="text" @input="$emit('update:modelValue', $event.target.value)" @blur="checkInput"  @focus="reset">
+    <input :type="type" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" @blur="checkInput"  @focus="reset">
 </template>
 
 <script>
-//import { ref } from '@vue/reactivity';
 export default {
     props:{
         type:{
             type:String,
-        }
+            default:'text',
+        },
+        modelValue:{
+        },
     },
     setup(props){
-        //const isInvalid = ref(false);
-        //:class="isInvalid && 'invalid'"
         const checkInput = (event)=>{
             const value = event.target.value;
             if (value.trim() == ''){
-                //isInvalid.value = true;
-                event.target.classList.add('invalid')
+                event.target.classList.add('invalid');
+                event.target.previousElementSibling.classList.add('invalid');
                 return
             }
             if (props.type == 'email'){
                 if (!validEmail(value)){
-                    //isInvalid.value = true;
-                    event.target.classList.add('invalid')
+                    event.target.classList.add('invalid');
+                    event.target.previousElementSibling.classList.add('invalid');
                 }
-                /*else if (validEmail(value)){
-                    isInvalid.value =false
-                }*/
             }
         }
 
         const reset = (event)=>{
-            //isInvalid.value = false;
             event.target.classList.remove("invalid");
+            event.target.previousElementSibling.classList.remove('invalid');
         }
 
         const validEmail = (email)=>{
@@ -43,15 +39,11 @@ export default {
         }
         return{
             reset,
-            //isInvalid,
-            checkInput
+            checkInput,
         }
     }
 }
 </script>
 
 <style>
-input.invalid{
-    border-color:red;
-}
 </style>
