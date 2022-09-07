@@ -58,6 +58,7 @@ export default {
 .container{
     display:flex;
     justify-content: space-between;
+    transition:all 5s ease;
     .intro-text{
         h1{
             font-size: 1.5rem;
@@ -90,6 +91,7 @@ export default {
         display:none
     }
     .drop-down{
+        transition:all var(--transition) ease;
         text-align: left;
         position:absolute;
         width:200px;

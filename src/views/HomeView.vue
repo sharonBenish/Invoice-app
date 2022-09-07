@@ -3,7 +3,9 @@
     <InvoiceOptions @newInvoiceClicked="isInvoiceFormOpen = true" @checked="filter" />
     <div class="invoice-list">
       <InvoiceRecord v-for="(invoice, index) in invoiceList" :key="index" :invoice="invoice" />
-      <NewInvoiceForm v-if="isInvoiceFormOpen" @closeForm="closeForm" />
+      <transition name="fade">
+        <NewInvoiceForm v-if="isInvoiceFormOpen" @closeForm="closeForm" />
+      </transition>
     </div>
   </div>
 </template>
@@ -32,9 +34,9 @@ export default {
         }
       }
       const closeForm = ()=>{
-        setTimeout(()=>{
+        //setTimeout(()=>{
           isInvoiceFormOpen.value = false
-        }, 340)
+        //}, 340)
       }
       return{
         invoiceList,
@@ -47,6 +49,9 @@ export default {
 </script>
 
 <style scoped>
+.container{
+  transition:all var(--transition) ease;
+}
 .container.formOpen{
   max-height: 100vh;
   overflow: hidden;
@@ -56,6 +61,16 @@ export default {
   flex-direction: column;
   gap:1rem;
   margin:1.5rem 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 </style>

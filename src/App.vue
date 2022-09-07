@@ -1,9 +1,15 @@
 <template>
   <div class="main-page" :class="theme.darkMode && 'darkMode'">
     <PageHeader/>
-    <DeleteModal :id="invoiceId" v-if="showDeleteModal" @cancelClicked="showDeleteModal = false" @deleteClicked="deleteInvoice" />
+    <transition>
+      <DeleteModal :id="invoiceId" v-if="showDeleteModal" @cancelClicked="showDeleteModal = false" @deleteClicked="deleteInvoice" />
+    </transition>
     <main>
-      <router-view @deleteClicked="OpenDeleteModal"></router-view>
+      <router-view @deleteClicked="OpenDeleteModal" v-slot="{ Component, route }">
+        <transition :name="route.meta.transition || 'fade'">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
   </div>
 </template>
@@ -58,6 +64,7 @@ body{
 }
 .main-page{
   background: var(--background);
+  transition:all var(--transition) ease;
 }
 main{
   position: relative;
@@ -72,6 +79,16 @@ main{
   
 }
 
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
 @media (min-width:1025px) {
   main{
     width:calc(100% - 6.5rem);
@@ -84,6 +101,7 @@ main{
 </style>
 <style>
   :root{
+    --transition:0.25s;
     --background:#F8F8FB;
     --purple: #7c5dfa;
     --purple-light:#9277ff;
@@ -117,4 +135,31 @@ main{
     --draft-color: #dfe3fa;
     --total-bg:#0c0e16;
   }
+
+.fade-left-leave-active{
+  animation: fadeOutLeft 1.5s
+}
+
+.fade-right-leave-active{
+  animation: fadeOutRight 1.5s
+}
+
+@keyframes fadeOutLeft {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+@keyframes fadeOutRight {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
 </style>

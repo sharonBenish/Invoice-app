@@ -48,9 +48,12 @@ export default {
 <style scoped>
     .record{
         background:var(--invoice-bg);
+        
     }
     .record:hover{
-        outline:1px solid var(--purple)
+        outline:1px solid var(--purple);
+        cursor:pointer;
+        transition: all 0.1s ease-out;
     }
     .invoice_id >span{
         color:var(--text-bold);
@@ -62,6 +65,7 @@ export default {
     padding:1rem 1.5rem;
     border-radius: 10px;
     color:var(--text);
+    transition:all var(--transition) ease;
 } 
 .arrow{
     display:none

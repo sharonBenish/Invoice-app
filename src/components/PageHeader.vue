@@ -33,6 +33,7 @@ header{
     left:0;
     right:0;
     z-index:1000;
+    transition:all var(--transition) ease;
 }
 .logo{
     position: relative;

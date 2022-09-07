@@ -137,6 +137,9 @@ export default {
 .header{
     background:var(--invoice-bg)
 }
+.info-container  * {
+    transition:all var(--transition) ease;
+}
 </style>
 
 <style scoped lang="scss">

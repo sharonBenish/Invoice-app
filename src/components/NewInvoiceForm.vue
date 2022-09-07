@@ -213,14 +213,12 @@ export default {
             formValidation(event);
             if(isValid.value){
                 addToInvoiceList();
-                //ctx.emit("closeForm");
                 closeForm();
             }
         };
         const saveAsDraft = () => {
             formDetails.value.status = "draft";
             addToInvoiceList();
-            //ctx.emit("closeForm");
             closeForm();
         };
 
@@ -236,16 +234,9 @@ export default {
             if(isValid.value){
                 formDetails.value.total = invoiceTotal.value;
                 store.saveChanges(props.id, formDetails.value);
-                //ctx.emit("closeForm");
                 closeForm()
             }
         };
-
-        //const cancelChanges = ()=>{
-            //ctx.emit("closeForm");
-        //};
-
-        
         
         //FORM VALIDATION
 
@@ -279,7 +270,6 @@ export default {
         return {
             todayDate,
             getTotal,
-            //discardClicked,
             invoiceItemsNumber,
             addNewItem,
             deleteItem,
@@ -290,7 +280,6 @@ export default {
             invalidEmail,
             noItem,
             emptyField,
-            //cancelChanges,
             closeForm,
             form
         };
@@ -308,8 +297,6 @@ $animation-duration: 0.35s;
     left:0;
     right:0;
     bottom:0;
-    animation-name:colorFadeIn;
-    animation-duration: $animation-duration;
 }
 
 .form_container{
@@ -321,6 +308,7 @@ $animation-duration: 0.35s;
     background: var(--background);
     animation-name:slidein;
     animation-duration: $animation-duration;
+    transition:all var(--transition) ease;
 }
 
 @keyframes slidein {
@@ -331,21 +319,17 @@ $animation-duration: 0.35s;
     from {transform: translateX(0)}
     to {transform:translateX(-100%)}
 }
-@keyframes colorFadeIn {
+/*@keyframes colorFadeIn {
     from {opacity: 0;}
     to {opacity: 1}
 }
 @keyframes colorFadeOut {
     from {opacity: 1};
     to {opacity:0}
-}
+}*/
 
 .form_container.out{
     animation-name:slideout;
-    animation-duration: $animation-duration;
-}
-.container.out{
-    animation-name:colorFadeOut;
     animation-duration: $animation-duration;
 }
 

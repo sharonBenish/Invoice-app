@@ -55,6 +55,10 @@ h2{
     color:var(--text-bold);
 }
 
+button{
+    cursor:pointer
+}
+
 .modal-content{
     background: var(--invoice-bg);
     border-radius: 10px;
