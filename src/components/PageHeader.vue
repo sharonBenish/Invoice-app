@@ -16,9 +16,7 @@
 </template>
 
 <script setup>
-    //import { defineEmits } from 'vue';
     import { ThemeToggle } from '@/store/theme';
-    //const emit = defineEmits(['toggleClicked']);
     const store = ThemeToggle();
     const { toggleTheme } = store
 </script>
@@ -74,6 +72,7 @@ header > div:last-of-type{
 .theme-toggle{
     padding:1rem;
     margin:auto;
+    cursor: pointer;
 }
 
 .profile{

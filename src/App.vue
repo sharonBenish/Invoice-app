@@ -19,7 +19,7 @@ import PageHeader from './components/PageHeader.vue';
 import json from "./data.json"
 import { InvoiceStore } from "@/store/store";
 import { ThemeToggle } from './store/theme';
-import { ref } from '@vue/runtime-core';
+import { onBeforeMount, ref } from '@vue/runtime-core';
 import DeleteModal from './components/DeleteModal.vue';
 import { useRouter } from 'vue-router';
 
@@ -43,12 +43,12 @@ const deleteInvoice = ()=>{
 }
 
 const theme = ThemeToggle();
+onBeforeMount(()=>{
+  theme.initTheme()
+})
 </script>
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700&display=swap');
-
-$purple: #7c5dfa;
-$purple-light:#9277ff;
 
 *{
   padding:0;
