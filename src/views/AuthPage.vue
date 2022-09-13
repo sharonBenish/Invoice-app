@@ -23,7 +23,7 @@
         </div>
         <button type="submit" class="auth" v-if="hasAccount">Log In</button>
         <button type="submit" class="auth" v-else>Sign Up</button>
-        <button type="submit" class="demo"><router-link to="/invoices">Demo</router-link></button>
+        <router-link to="/invoices"><button type="submit" class="demo">Demo</button></router-link>
         <p v-if="hasAccount">Don't have an account? <a @click="hasAccount = false">Sign Up</a></p>
         <p v-else>ALready have an account? <a @click="hasAccount = true">Login</a></p>
     </form>
