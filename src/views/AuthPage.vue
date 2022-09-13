@@ -23,7 +23,7 @@
         </div>
         <button type="submit" class="auth" v-if="hasAccount">Log In</button>
         <button type="submit" class="auth" v-else>Sign Up</button>
-        <button type="submit" class="demo" @click="goToDemo">Demo App</button>
+        <button type="submit" class="demo"><router-link to="/invoices">Demo</router-link></button>
         <p v-if="hasAccount">Don't have an account? <a @click="hasAccount = false">Sign Up</a></p>
         <p v-else>ALready have an account? <a @click="hasAccount = true">Login</a></p>
     </form>
@@ -32,16 +32,7 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
-import { useRouter } from "vue-router";
-
-const router = useRouter()
 const hasAccount = ref(true);
-const goToDemo = ()=>{
-    router.push({
-        path:'/invoices',
-        replace:true
-    })
-}
 </script>
 
 <style scoped>
