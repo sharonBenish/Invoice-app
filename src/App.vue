@@ -144,6 +144,7 @@ main{
   animation: fadeOutRight 1.5s
 }
 
+
 @keyframes fadeOutLeft {
   from {
     opacity: 1;
