@@ -9,16 +9,35 @@
             <img v-else src="../assets/icon-moon.svg" alt="">
         </div>
         <div class="profile">
-            <img class="img-fluid" src="../assets/image-avatar.jpeg" alt="avatar">
+            <img class="img-fluid" src="../assets/image-avatar.jpeg" alt="avatar" @click="showProfileMenu = !showProfileMenu">
+            <div class="pop-up" v-if="showProfileMenu">
+                <button @click="LogOut">Sign Out</button>
+            </div>
         </div>
     </div>
   </header>
 </template>
 
 <script setup>
+    import { getAuth, signOut } from "firebase/auth"
     import { ThemeToggle } from '@/store/theme';
+    import { ref } from '@vue/reactivity';
+
     const store = ThemeToggle();
-    const { toggleTheme } = store
+    const { toggleTheme } = store;
+
+    const showProfileMenu = ref(false);
+
+    const auth = getAuth()
+    const LogOut =()=>{
+        signOut(auth)
+            .then(()=>{
+                console.log('user signed out')
+            })
+            .catch ((err)=>{
+                console.log(err.message)
+            })
+    }
 </script>
 
 <style lang="scss" scoped >
@@ -76,6 +95,7 @@ header > div:last-of-type{
 }
 
 .profile{
+    position: relative;
     width:5rem;
     height: 100%;
     display: flex;
@@ -86,7 +106,19 @@ header > div:last-of-type{
         width:30px;
         height: 30px;
         border-radius:50%;
+        cursor: pointer;
     }
+}
+
+.pop-up{
+    position: absolute;
+    width:200px;
+    height: auto;
+    padding:1rem;
+    background: #fff;
+    top:110%;
+    left:-150px;
+    border-radius: 5px;
 }
 
 @media (min-width:1025px) {
@@ -114,5 +146,12 @@ header > div:last-of-type{
         border-left: 0;
         flex-direction: column;
     }
+    
+    .pop-up{
+        top:-100%;
+        left:120%;
+        width:300px;
+    }
+
 }
 </style>

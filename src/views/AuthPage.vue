@@ -1,29 +1,29 @@
 <template>
   <div class="container">
     <div v-if="hasAccount" class="intro">
-        <h2>Welcome Back! </h2>
+        <h2>Welcome Back!</h2>
         <p>Sign in to continue</p>
     </div>
     <div v-else class="intro">
         <h2>Create Account</h2>
         <p>Create a new account</p>
     </div>
-    <form>
+    <form ref="form">
         <div class="email">
             <label>Email address</label>
-            <input type="text">
+            <input type="text" v-model="email">
         </div>
         <div class="password">
             <label>Password</label>
-            <input type="password">
+            <input type="password" v-model="password">
         </div>
         <div v-show="!hasAccount" class="password">
             <label>Confirm Password</label>
-            <input type="password">
+            <input type="password" v-model="confirmPassword">
         </div>
-        <button type="submit" class="auth" v-if="hasAccount">Log In</button>
-        <button type="submit" class="auth" v-else>Sign Up</button>
-        <router-link to="/invoices"><button type="submit" class="demo">Demo</button></router-link>
+        <button class="auth" v-if="hasAccount" @click="signIn">Log In</button>
+        <button class="auth" v-else @click="signUp">Sign Up</button>
+        <router-link to="/invoices"><button class="demo">Demo</button></router-link>
         <p v-if="hasAccount">Don't have an account? <a @click="hasAccount = false">Sign Up</a></p>
         <p v-else>ALready have an account? <a @click="hasAccount = true">Login</a></p>
     </form>
@@ -32,7 +32,40 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+//import { InvoiceStore } from "@/store/store";
+
 const hasAccount = ref(true);
+
+const form = ref(null);
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+
+const auth = getAuth();
+const signUp = ()=>{
+    if (password.value === confirmPassword.value){
+        createUserWithEmailAndPassword(auth, email.value, password.value)
+            .then((cred)=>{
+                console.log(cred.user);
+                form.value.reset();
+            })
+            .catch((err)=>{
+                console.log(err.message)
+            })
+    }  
+}
+const signIn = ()=>{
+    signInWithEmailAndPassword(auth, email.value, password.value)
+        .then((cred)=>{
+            console.log('user logged in:', cred.user);
+            form.value.reset();
+        })
+        .catch((err)=>{
+            console.log(err.message)
+        })
+}
+
 </script>
 
 <style scoped>

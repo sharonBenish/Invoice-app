@@ -24,9 +24,7 @@ export const InvoiceStore = defineStore("invoice", {
         },
         markAsPaid(id){
             const invoice = this.invoiceData.find(invoice => invoice.id == id);
-            //console.log(invoice);
             invoice.status = "paid";
-            //console.log(this.invoiceData)
         },
         deleteInvoice(id){
             this.invoiceData = this.invoiceData.filter(invoice => invoice.id !== id);
