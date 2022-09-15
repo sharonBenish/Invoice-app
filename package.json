@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "firebase": "^9.9.4",
     "nanoid": "^4.0.0",
     "pinia": "^2.0.21",
     "vue": "^3.2.13",
