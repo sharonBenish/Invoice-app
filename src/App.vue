@@ -22,11 +22,28 @@ import { ThemeToggle } from './store/theme';
 import { onBeforeMount, ref } from '@vue/runtime-core';
 import DeleteModal from './components/DeleteModal.vue';
 import { useRouter } from 'vue-router';
+import { getAuth, onAuthStateChanged } from "firebase/auth"
 
 const invoiceStore = InvoiceStore()
-invoiceStore.loadInvoices(json)
-
+invoiceStore.loadInvoices(json);
 const router = useRouter()
+
+onBeforeMount(()=>{
+  const auth = getAuth()
+  onAuthStateChanged(auth, (user)=>{
+         if(user){
+             //const displayName = user.displayName;
+             router.push({
+                 path:"/invoices"
+             })
+             invoiceStore.setUser(user);
+             invoiceStore.getDatabase()
+             console.log('logged in')
+         } else{
+            console.log('logged out')
+         }
+     })
+})
 
 const showDeleteModal = ref(false);
 const invoiceId = ref('');

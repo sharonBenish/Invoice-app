@@ -22,9 +22,13 @@
     import { getAuth, signOut } from "firebase/auth"
     import { ThemeToggle } from '@/store/theme';
     import { ref } from '@vue/reactivity';
+    import { useRouter } from "vue-router";
+    import { InvoiceStore } from "@/store/store";
 
     const store = ThemeToggle();
+    const router = useRouter();
     const { toggleTheme } = store;
+    const invoiceStore = InvoiceStore();
 
     const showProfileMenu = ref(false);
 
@@ -32,11 +36,15 @@
     const LogOut =()=>{
         signOut(auth)
             .then(()=>{
-                console.log('user signed out')
+                console.log('user signed out');
+                invoiceStore.resetUserData()
             })
             .catch ((err)=>{
                 console.log(err.message)
             })
+        router.push({
+            path:"/"
+        })
     }
 </script>
 

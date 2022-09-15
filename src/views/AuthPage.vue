@@ -13,6 +13,10 @@
             <label>Email address</label>
             <input type="text" v-model="email">
         </div>
+        <div class="username" v-show="!hasAccount">
+            <label>Username</label>
+            <input type="text" v-model="username">
+        </div>
         <div class="password">
             <label>Password</label>
             <input type="password" v-model="password">
@@ -21,8 +25,8 @@
             <label>Confirm Password</label>
             <input type="password" v-model="confirmPassword">
         </div>
-        <button class="auth" v-if="hasAccount" @click="signIn">Log In</button>
-        <button class="auth" v-else @click="signUp">Sign Up</button>
+        <button class="auth" v-if="hasAccount" @click.prevent="signIn">Log In</button>
+        <button class="auth" v-else @click.prevent="signUp">Sign Up</button>
         <router-link to="/invoices"><button class="demo">Demo</button></router-link>
         <p v-if="hasAccount">Don't have an account? <a @click="hasAccount = false">Sign Up</a></p>
         <p v-else>ALready have an account? <a @click="hasAccount = true">Login</a></p>
@@ -34,11 +38,15 @@
 import { ref } from "@vue/reactivity";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 //import { InvoiceStore } from "@/store/store";
+//import { onBeforeMount } from "@vue/runtime-core";
+//import { useRouter } from "vue-router";
 
+//const store = InvoiceStore();
 const hasAccount = ref(true);
 
 const form = ref(null);
 const email = ref("");
+const username = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 
@@ -47,7 +55,9 @@ const signUp = ()=>{
     if (password.value === confirmPassword.value){
         createUserWithEmailAndPassword(auth, email.value, password.value)
             .then((cred)=>{
-                console.log(cred.user);
+                cred.user.displayName= username.value;
+                //console.log(cred.user);
+                //store.addUser(cred.user.uid)
                 form.value.reset();
             })
             .catch((err)=>{
