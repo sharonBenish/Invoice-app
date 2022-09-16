@@ -34,6 +34,7 @@
 
     const auth = getAuth()
     const LogOut =()=>{
+        invoiceStore.setToUserMode()
         signOut(auth)
             .then(()=>{
                 console.log('user signed out');
