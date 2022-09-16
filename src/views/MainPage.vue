@@ -1,12 +1,8 @@
 <template>
   <div class="container" :class="isInvoiceFormOpen && 'formOpen'" >
     <InvoiceOptions @newInvoiceClicked="isInvoiceFormOpen = true" @checked="filter" />
-    <div>
-      <div v-if="store.database.length > 0">{{store.database}}</div>
-      <h1 v-else>Database empty</h1>
-    </div>
     <div class="invoice-list">
-      <InvoiceRecord v-for="(invoice, index) in invoiceList" :key="index" :invoice="invoice" />
+      <InvoiceRecord v-for="(invoice, index) in store.invoiceData" :key="index" :invoice="invoice" />
       <transition name="fade">
         <NewInvoiceForm v-if="isInvoiceFormOpen" @closeForm="closeForm" />
       </transition>
@@ -24,15 +20,15 @@ export default {
     components: { InvoiceOptions, InvoiceRecord, NewInvoiceForm },
     setup(){
       const isInvoiceFormOpen = ref(false);
-      const invoiceList = ref()
+      const invoiceList = ref("")
   
       const store = InvoiceStore();
-      const { invoiceData } = store;
-      invoiceList.value = invoiceData
+      //const { invoiceData } = store;
+      invoiceList.value = store.invoiceData;
       
       const filter = (type)=>{
         if (type == 'all'){
-          invoiceList.value = invoiceData;
+          invoiceList.value = store.invoiceData;
         }else{
           invoiceList.value = store.filterByStatus(type);
         }
@@ -47,7 +43,7 @@ export default {
         isInvoiceFormOpen,
         filter,
         closeForm,
-        store
+        store,
       }
     }
 }

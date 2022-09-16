@@ -109,7 +109,7 @@ export default {
         console.log(getInvoiceById(id.value))
         const markAsPaid = ()=>{
             console.log("marked")
-            store.markAsPaid(id.value)
+            store.markAsPaid(id.value, getInvoiceById(id.value).docId)
         }
         const isInvoiceFormOpen = ref(false);
         const closeForm = ()=>{

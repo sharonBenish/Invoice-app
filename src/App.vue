@@ -16,7 +16,7 @@
 
 <script setup>
 import PageHeader from './components/PageHeader.vue';
-import json from "./data.json"
+//import json from "./data.json"
 import { InvoiceStore } from "@/store/store";
 import { ThemeToggle } from './store/theme';
 import { onBeforeMount, ref } from '@vue/runtime-core';
@@ -25,7 +25,7 @@ import { useRouter } from 'vue-router';
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 
 const invoiceStore = InvoiceStore()
-invoiceStore.loadInvoices(json);
+//invoiceStore.loadInvoices(json);
 const router = useRouter()
 
 onBeforeMount(()=>{
@@ -52,7 +52,7 @@ const OpenDeleteModal = (id)=>{
   invoiceId.value= id;
 }
 const deleteInvoice = ()=>{
-  invoiceStore.deleteInvoice(invoiceId.value);
+  invoiceStore.deleteInvoice(invoiceId.value, invoiceStore.getInvoiceById(invoiceId.value).docId);
   showDeleteModal.value = false;
   setTimeout(()=>{
     router.go(-1);

@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
-import { getFirestore, onSnapshot,collection,addDoc /*doc, setDoc*/} from '@firebase/firestore';
+import { getFirestore, onSnapshot,collection,addDoc, doc, updateDoc, deleteDoc, orderBy, query, serverTimestamp /*, setDoc*/} from '@firebase/firestore';
 
 export const InvoiceStore = defineStore("invoice", {
     state: ()=>({
         invoiceData:[],
         user:[],
         database:[],
+        demoMode:false,
     }),
     getters:{
         getInvoiceById:(state)=>{
@@ -19,41 +20,88 @@ export const InvoiceStore = defineStore("invoice", {
         }
     },
     actions:{
+        setToDemoMode(){
+            this.demoMode = true
+        },
+        setToUserMode(){
+            this.demoMode = false
+        },
         loadInvoices(data){
             this.invoiceData = data
         },
         addNewInvoice(data){
-            this.invoiceData.unshift(data)
+            if (this.demoMode){
+                this.invoiceData.unshift(data)
+            }else{
+                const db = getFirestore();
+                const docRef = collection(db,`users/${this.user.uid}/invoices`);
+                addDoc(docRef, {...data, timeStamp:serverTimestamp() }
+                ).then(()=>{
+                    console.log("document added")
+                })
+            }
         },
-        markAsPaid(id){
-            const invoice = this.invoiceData.find(invoice => invoice.id == id);
-            invoice.status = "paid";
+        markAsPaid(id, docId){
+            if (this.demoMode){
+                const invoice = this.invoiceData.find(invoice => invoice.id == id);
+                invoice.status = "paid";
+            }else{
+                const db = getFirestore();
+                const docRef = doc(db, 'users', this.user.uid, 'invoices', docId)
+                updateDoc(docRef, {
+                    status:"paid"
+                })
+                .then(()=>{
+                    console.log("status changed")
+                })
+            }
         },
-        deleteInvoice(id){
-            this.invoiceData = this.invoiceData.filter(invoice => invoice.id !== id);
+        deleteInvoice(id, docId){
+            if (this.demoMode){
+                this.invoiceData = this.invoiceData.filter(invoice => invoice.id !== id);
+            } else{
+                const db = getFirestore();
+                const docRef = doc(db, 'users', this.user.uid, 'invoices', docId);
+                deleteDoc(docRef)
+                    .then(()=>{
+                        console.log("invoice deleted")
+                    })
+            }
+            
         },
-        saveChanges(id, changes){
-            const indx = this.invoiceData.findIndex(invoice => invoice.id == id);
-            this.invoiceData[indx] = changes;
-            console.log(this.invoiceData)
+        saveChanges(id, changes, docId){
+            if (this.demoMode){
+                const indx = this.invoiceData.findIndex(invoice => invoice.id == id);
+                this.invoiceData[indx] = changes;
+                console.log(this.invoiceData)
+            }else{
+                const db = getFirestore();
+                const docRef = doc(db, 'users', this.user.uid, 'invoices', docId);
+                updateDoc(docRef, changes)
+                .then(()=>{
+                    console.log("invoice updated")
+                })
+            }
+             
         },
         setUser(uid){
             this.user = uid;
         },
         resetUserData(){
-            this.database =[];
+            this.invoiceData =[];
             this.user = [];
         },
         getDatabase(){
             const db = getFirestore();
             const colRef = collection(db, `users/${this.user.uid}/invoices`);
-            onSnapshot(colRef, (snapshot)=>{
-                 let books=[];
+            const q = query(colRef, orderBy('timeStamp', "desc"))
+            onSnapshot(q, (snapshot)=>{
+                 let invoices=[];
                  snapshot.docs.forEach((doc)=>{
-                     books.push(doc.data())
+                     invoices.push({...doc.data(), docId: doc.id})
                  })
-                 console.log(books)
-                 this.database = books
+                 console.log(invoices)
+                 this.invoiceData = invoices
              })
             // const docRef = doc(db, "users", this.user.uid);
             // onSnapshot(docRef, (snapshot)=>{
@@ -66,79 +114,6 @@ export const InvoiceStore = defineStore("invoice", {
             //     console.log(invoices)
             // })
             
-        },
-        addUser(userId){
-            const db = getFirestore();
-            const usersRef = collection(db,`users/${userId}/invoices`);
-            addDoc(usersRef, {
-                id: "RT3080",
-                createdAt: "2021-08-18",
-                paymentDue: "2021-08-19",
-                description: "Re-branding",
-                paymentTerms: 1,
-                clientName: "Jensen Huang",
-                clientEmail: "jensenh@mail.com",
-                status: "paid",
-                senderAddress: {
-                    street: "19 Union Terrace",
-                    city: "London",
-                    postCode: "E1 3EZ",
-                    country: "United Kingdom"
-                },
-                clientAddress: {
-                    street: "106 Kendell Street",
-                    city: "Sharrington",
-                    postCode: "NR24 5WQ",
-                    country: "United Kingdom"
-                },
-                items: [
-                    {
-                        name: "Brand Guidelines",
-                        quantity: 1,
-                        price: 1800.90,
-                        total: 1800.90
-                    }
-                ],
-                total: 1800.90
-            }
-            ).then(()=>{
-                console.log("document added")
-            })
-
-            //addDoc(usersRef, {userId})
-            //setDoc(doc(db, "users", userId), {invoices:[]}
-            // {
-            //     id: "RT3080",
-            //     createdAt: "2021-08-18",
-            //     paymentDue: "2021-08-19",
-            //     description: "Re-branding",
-            //     paymentTerms: 1,
-            //     clientName: "Jensen Huang",
-            //     clientEmail: "jensenh@mail.com",
-            //     status: "paid",
-            //     senderAddress: {
-            //         street: "19 Union Terrace",
-            //         city: "London",
-            //         postCode: "E1 3EZ",
-            //         country: "United Kingdom"
-            //     },
-            //     clientAddress: {
-            //         street: "106 Kendell Street",
-            //         city: "Sharrington",
-            //         postCode: "NR24 5WQ",
-            //         country: "United Kingdom"
-            //     },
-            //     items: [
-            //         {
-            //             name: "Brand Guidelines",
-            //             quantity: 1,
-            //             price: 1800.90,
-            //             total: 1800.90
-            //         }
-            //     ],
-            //     total: 1800.90
-            // }
-            // )
         }
     }
 })

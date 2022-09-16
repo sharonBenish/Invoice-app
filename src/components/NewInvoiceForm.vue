@@ -196,7 +196,7 @@ export default {
             formDetails.value.id = nanoid(6).toUpperCase();
             formDetails.value.createdAt = createdAt;
             formDetails.value.paymentDue = paymentDue;
-            formDetails.value.total = invoiceTotal.value;
+            formDetails.value.total = invoiceTotal.value
             console.log(formDetails.value);
             store.addNewInvoice(formDetails.value);
         };
@@ -233,7 +233,7 @@ export default {
             formValidation(event);
             if(isValid.value){
                 formDetails.value.total = invoiceTotal.value;
-                store.saveChanges(props.id, formDetails.value);
+                store.saveChanges(props.id, formDetails.value, store.getInvoiceById(props.id).docId);
                 closeForm()
             }
         };
