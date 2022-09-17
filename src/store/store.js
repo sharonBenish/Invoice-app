@@ -5,8 +5,8 @@ export const InvoiceStore = defineStore("invoice", {
     state: ()=>({
         invoiceData:[],
         user:[],
-        database:[],
         demoMode:false,
+        databaseLoaded:false,
     }),
     getters:{
         getInvoiceById:(state)=>{
@@ -90,6 +90,7 @@ export const InvoiceStore = defineStore("invoice", {
         resetUserData(){
             this.invoiceData =[];
             this.user = [];
+            this.databaseLoaded=false;
         },
         getDatabase(){
             const db = getFirestore();
@@ -101,7 +102,8 @@ export const InvoiceStore = defineStore("invoice", {
                      invoices.push({...doc.data(), docId: doc.id})
                  })
                  console.log(invoices)
-                 this.invoiceData = invoices
+                 this.invoiceData = invoices;
+                 this.databaseLoaded = true;
              })
             // const docRef = doc(db, "users", this.user.uid);
             // onSnapshot(docRef, (snapshot)=>{

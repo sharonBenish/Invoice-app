@@ -1,6 +1,13 @@
 <template>
   <div class="container" :class="isInvoiceFormOpen && 'formOpen'" >
     <InvoiceOptions @newInvoiceClicked="isInvoiceFormOpen = true" @checked="filter" />
+    <div v-if="!store.demoMode && !store.databaseLoaded" class="loading-spinner">
+      <img src="../assets/Rolling-1s-200px.svg" alt="loading spinner">
+    </div>
+    <div v-if="(store.databaseLoaded && store.invoiceData.length == 0) ||(store.demoMode && store.invoiceData.length == 0 ) " class="empty">
+      <img src="../assets/empty-folder.png" alt="loading spinner">
+      <h2>No invoices found.</h2>
+    </div>
     <div class="invoice-list">
       <InvoiceRecord v-for="(invoice, index) in store.invoiceData" :key="index" :invoice="invoice" />
       <transition name="fade">
@@ -74,4 +81,18 @@ export default {
   opacity: 0;
 }
 
+.loading-spinner, .empty{
+  display:flex;
+  justify-content: center;
+  padding:2rem 0;
+  height:30vh;
+}
+.empty{
+  flex-direction: column;
+  align-items: center;
+  color:var(--text-bold)
+}
+.empty> img{
+  height: 80%;
+}
 </style>
