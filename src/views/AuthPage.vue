@@ -8,7 +8,7 @@
         <h2>Create Account</h2>
         <p>Create a new account</p>
     </div>
-    <form ref="form">
+    <form ref="form" @click="errorMsg = ''">
         <div class="email">
             <label>Email address</label>
             <input type="text" v-model="email">
@@ -25,6 +25,7 @@
             <label>Confirm Password</label>
             <input type="password" v-model="confirmPassword">
         </div>
+        <p class="error-msg">{{errorMsg}}</p>
         <button class="auth" v-if="hasAccount" @click.prevent="signIn">Log In</button>
         <button class="auth" v-else @click.prevent="signUp">Sign Up</button>
         <router-link to="/invoices"><button @click="demo" class="demo">Demo</button></router-link>
@@ -44,7 +45,7 @@ import json from "../data.json"
 
 const store = InvoiceStore();
 const hasAccount = ref(true);
-
+const errorMsg = ref("");
 const form = ref(null);
 const email = ref("");
 const username = ref("");
@@ -54,7 +55,7 @@ const confirmPassword = ref("");
 const auth = getAuth();
 const signUp = ()=>{
     store.setToUserMode()
-    if (password.value === confirmPassword.value){
+    if (password.value === confirmPassword.value && username.value.trim().length > 5){
         createUserWithEmailAndPassword(auth, email.value, password.value)
             .then((cred)=>{
                 cred.user.displayName= username.value;
@@ -63,7 +64,8 @@ const signUp = ()=>{
                 form.value.reset();
             })
             .catch((err)=>{
-                console.log(err.message)
+                console.log(err.message);
+                errorMsg.value = err.message;
             })
     }  
 }
@@ -75,7 +77,8 @@ const signIn = ()=>{
             form.value.reset();
         })
         .catch((err)=>{
-            console.log(err.message)
+            console.log(err.message);
+            errorMsg.value = err.message;
         })
 }
 
@@ -184,6 +187,11 @@ a{
 .demo{
     background: var(--header-bg);
     color: var(--draft-color);
+}
+.error-msg{
+    color:rgb(236, 87, 87);
+    font-weight: bolder;
+    text-align: left;
 }
 @media (min-width:1025px) {
 }

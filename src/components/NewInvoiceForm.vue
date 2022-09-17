@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div ref="form" class="form_container">
-        <h2 v-if="id">Edit <span>#</span>{{id}}</h2>
+        <h2 v-if="id">Edit <span>#</span>{{ id }}</h2>
         <h2 v-else>Create Invoice</h2>
         <div class="form">
             <h3>Bill From</h3>
