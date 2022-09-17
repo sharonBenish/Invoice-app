@@ -16,31 +16,31 @@
 
 <script setup>
 import PageHeader from './components/PageHeader.vue';
-//import json from "./data.json"
+import json from "./data.json"
 import { InvoiceStore } from "@/store/store";
 import { ThemeToggle } from './store/theme';
 import { onBeforeMount, ref } from '@vue/runtime-core';
 import DeleteModal from './components/DeleteModal.vue';
-import { useRouter } from 'vue-router';
-import { getAuth, onAuthStateChanged } from "firebase/auth"
+import { useRoute, useRouter } from 'vue-router';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const invoiceStore = InvoiceStore()
-//invoiceStore.loadInvoices(json);
-const router = useRouter()
+const router = useRouter();
+const route = useRoute();
 
 onBeforeMount(()=>{
   const auth = getAuth()
   onAuthStateChanged(auth, (user)=>{
          if(user){
-             //const displayName = user.displayName;
              router.push({
                  path:"/invoices"
              })
              invoiceStore.setUser(user);
              invoiceStore.getDatabase()
              console.log('logged in')
-         } else{
-            console.log('logged out')
+         } else if(route.path != "/"){
+            invoiceStore.demoMode = true;
+            invoiceStore.loadInvoices(json)
          }
      })
 })
