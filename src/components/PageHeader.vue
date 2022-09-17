@@ -9,9 +9,10 @@
             <img v-else src="../assets/icon-moon.svg" alt="">
         </div>
         <div class="profile">
-            <img class="img-fluid" src="../assets/image-avatar.jpeg" alt="avatar" @click="showProfileMenu = !showProfileMenu">
+            <img class="img-fluid" src="../assets/image-avatar.jpeg" alt="avatar" @click="showProfileMenu = !showProfileMenu" @blur="test">
             <div class="pop-up" v-if="showProfileMenu">
-                <button @click="LogOut">Sign Out</button>
+                <p>Hi {{invoiceStore.user.displayName|| "User"}}! </p>
+                <button class="log-out" @click="LogOut">Sign Out</button>
             </div>
         </div>
     </div>
@@ -22,11 +23,14 @@
     import { getAuth, signOut } from "firebase/auth"
     import { ThemeToggle } from '@/store/theme';
     import { ref } from '@vue/reactivity';
-    import { useRouter } from "vue-router";
+    import { useRoute, useRouter } from "vue-router";
     import { InvoiceStore } from "@/store/store";
+    import { watch } from "@vue/runtime-core";
 
     const store = ThemeToggle();
     const router = useRouter();
+    const route = useRoute();
+
     const { toggleTheme } = store;
     const invoiceStore = InvoiceStore();
 
@@ -34,6 +38,7 @@
 
     const auth = getAuth()
     const LogOut =()=>{
+        showProfileMenu.value = false;
         invoiceStore.setToUserMode()
         signOut(auth)
             .then(()=>{
@@ -47,6 +52,10 @@
             path:"/"
         })
     }
+    console.log(invoiceStore.user)
+    watch( route, ()=>{
+        showProfileMenu.value = false;
+    })
 </script>
 
 <style lang="scss" scoped >
@@ -128,6 +137,25 @@ header > div:last-of-type{
     top:110%;
     left:-150px;
     border-radius: 5px;
+    background: var(--header-bg);
+    color:var(--purple);
+    font-weight:bolder;
+    font-size:1.2rem;
+    text-align: center;
+}
+
+.log-out{
+    border:none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding:0.6rem 1rem;
+    margin-top:20px;
+    background: #fff;
+}
+
+.log-out:hover{
+    background: var(--purple-light);
 }
 
 @media (min-width:1025px) {
@@ -160,6 +188,7 @@ header > div:last-of-type{
         top:-100%;
         left:120%;
         width:300px;
+        padding: 2rem;
     }
 
 }
