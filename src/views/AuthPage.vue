@@ -40,6 +40,7 @@ import { ref } from "@vue/reactivity";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { InvoiceStore } from "@/store/store";
 import json from "../data.json"
+import { watch } from "@vue/runtime-core";
 //import { onBeforeMount } from "@vue/runtime-core";
 //import { useRouter } from "vue-router";
 
@@ -87,6 +88,12 @@ const demo = ()=>{
     store.loadInvoices(json)
 }
 
+watch(hasAccount,()=>{
+    email.value = "";
+    password.value ="";
+    confirmPassword.value="";
+    username.value ="";
+})
 </script>
 
 <style scoped>
@@ -95,6 +102,7 @@ const demo = ()=>{
     flex-direction: column;
     align-items: center;
     height:100%;
+    overflow: scroll;
 }
 .intro{
     margin-bottom: 2rem;
@@ -137,6 +145,11 @@ form >div::after{
 }
 .password::after{
     background-image: url("../assets/lock.png");
+}
+.username::after{
+    background-image: url("../assets/user.png");
+    height:18px;
+    width:18px;
 }
 label{
     display: block;
