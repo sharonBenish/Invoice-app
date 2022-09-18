@@ -4,12 +4,12 @@
     <div v-if="!store.demoMode && !store.databaseLoaded" class="loading-spinner">
       <img src="../assets/Rolling-1s-200px.svg" alt="loading spinner">
     </div>
-    <div v-if="(store.databaseLoaded && store.invoiceData.length == 0) ||(store.demoMode && store.invoiceData.length == 0 ) " class="empty">
+    <div v-if="(store.databaseLoaded && invoices.length == 0) ||(store.demoMode && invoices.length == 0 ) " class="empty">
       <img src="../assets/empty-folder.png" alt="loading spinner">
       <h2>No invoices found.</h2>
     </div>
     <div class="invoice-list">
-      <InvoiceRecord v-for="(invoice, index) in store.invoiceData" :key="index" :invoice="invoice" />
+      <InvoiceRecord v-for="(invoice, index) in invoices" :key="index" :invoice="invoice" />
       <transition name="fade">
         <NewInvoiceForm v-if="isInvoiceFormOpen" @closeForm="closeForm" />
       </transition>
@@ -22,35 +22,38 @@ import { InvoiceStore } from "@/store/store";
 import NewInvoiceForm from "@/components/NewInvoiceForm.vue";
 import InvoiceOptions from "../components/InvoiceOptions.vue";
 import InvoiceRecord from "@/components/InvoiceRecord.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 export default {
     components: { InvoiceOptions, InvoiceRecord, NewInvoiceForm },
     setup(){
       const isInvoiceFormOpen = ref(false);
-      const invoiceList = ref("")
+      const type = ref("all");
   
       const store = InvoiceStore();
-      //const { invoiceData } = store;
-      invoiceList.value = store.invoiceData;
+      const invoices = computed(()=>{ 
+        if (type.value == "all"){
+          return store.invoiceData
+        } else{
+          return store.filterByStatus(type.value)
+        }
+      });
       
-      const filter = (type)=>{
-        if (type == 'all'){
-          invoiceList.value = store.invoiceData;
+      const filter = (filter)=>{
+        if (filter == 'all'){
+          type.value = "all"
         }else{
-          invoiceList.value = store.filterByStatus(type);
+          type.value= filter
         }
       }
       const closeForm = ()=>{
-        //setTimeout(()=>{
           isInvoiceFormOpen.value = false
-        //}, 340)
       }
       return{
-        invoiceList,
         isInvoiceFormOpen,
         filter,
         closeForm,
         store,
+        invoices
       }
     }
 }
