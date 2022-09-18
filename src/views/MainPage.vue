@@ -17,45 +17,34 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { InvoiceStore } from "@/store/store";
 import NewInvoiceForm from "@/components/NewInvoiceForm.vue";
 import InvoiceOptions from "../components/InvoiceOptions.vue";
 import InvoiceRecord from "@/components/InvoiceRecord.vue";
 import { computed, ref } from "vue";
-export default {
-    components: { InvoiceOptions, InvoiceRecord, NewInvoiceForm },
-    setup(){
-      const isInvoiceFormOpen = ref(false);
-      const type = ref("all");
-  
-      const store = InvoiceStore();
-      const invoices = computed(()=>{ 
-        if (type.value == "all"){
-          return store.invoiceData
-        } else{
-          return store.filterByStatus(type.value)
-        }
-      });
-      
-      const filter = (filter)=>{
-        if (filter == 'all'){
-          type.value = "all"
-        }else{
-          type.value= filter
-        }
-      }
-      const closeForm = ()=>{
-          isInvoiceFormOpen.value = false
-      }
-      return{
-        isInvoiceFormOpen,
-        filter,
-        closeForm,
-        store,
-        invoices
-      }
-    }
+
+const isInvoiceFormOpen = ref(false);
+const type = ref("all");
+
+const store = InvoiceStore();
+const invoices = computed(()=>{ 
+  if (type.value == "all"){
+    return store.invoiceData
+  } else{
+    return store.filterByStatus(type.value)
+  }
+});
+
+const filter = (filter)=>{
+  if (filter == 'all'){
+    type.value = "all"
+  }else{
+    type.value= filter
+  }
+}
+const closeForm = ()=>{
+    isInvoiceFormOpen.value = false
 }
 </script>
 

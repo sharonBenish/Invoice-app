@@ -2,7 +2,7 @@
   <div class="modal-container">
     <div class="modal-content">
         <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete invoice {{id}}? This action cannot be undone.</p>
+        <p>Are you sure you want to delete invoice {{props.id}}? This action cannot be undone.</p>
         <div class="button-group">
             <button class="cancel" @click="cancelClicked">Cancel</button>
             <button class="delete" @click="deleteClicked">Delete</button>
@@ -11,29 +11,19 @@
   </div>
 </template>
 
-<script>
-export default {
-    props:{
-        id:{
-            type:String
-        }
-    },
-    setup(props,ctx){
-        const cancelClicked = ()=>{
-            ctx.emit('cancelClicked')
-        }
-
-        const deleteClicked = ()=>{
-            ctx.emit('deleteClicked');
-        }
-        
-        return{
-            cancelClicked,
-            deleteClicked
-        }
+<script setup>
+    import { defineProps } from 'vue';
+    import { defineEmits } from 'vue';
+    const props = defineProps({
+         id:String
+    })
+    const emit = defineEmits(['cancelClicked', 'deleteClicked'])
+    const cancelClicked = ()=>{
+        emit('cancelClicked')
     }
-
-}
+    const deleteClicked = ()=>{
+        emit('deleteClicked')
+    }
 </script>
 
 <style scoped lang="scss">

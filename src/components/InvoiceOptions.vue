@@ -23,34 +23,28 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { InvoiceStore } from '@/store/store';
 import { ref } from '@vue/reactivity';
 import CustomCheckbox from './CustomCheckbox.vue';
-export default {
-    components: {CustomCheckbox },
-    setup(props, ctx){
-        const store = InvoiceStore();
+import { defineEmits } from 'vue';
 
-        const newInvoiceClicked = ()=>{
-            ctx.emit('newInvoiceClicked')
-        }
-        const showDropDown = ref(false);
-        const openDropDown = ()=>{
-            showDropDown.value = !showDropDown.value;
-        }
-        const check = (event)=>{
-            ctx.emit('checked', event.target.id)
-        }
+const emit = defineEmits(['newInvoiceClicked','checked']);
 
-        return{
-            store,
-            showDropDown,
-            newInvoiceClicked,
-            openDropDown,
-            check
-        }
-    }
+const store = InvoiceStore();
+
+const newInvoiceClicked = ()=>{
+    emit('newInvoiceClicked');
+}
+
+const showDropDown = ref(false);
+
+const openDropDown = ()=>{
+    showDropDown.value = !showDropDown.value;
+}
+
+const check = (event)=>{
+    emit('checked', event.target.id)
 }
 </script>
 

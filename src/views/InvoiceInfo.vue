@@ -1,6 +1,8 @@
 <template>
     <div class="invoice-container" :class="isInvoiceFormOpen && 'formOpen'">
-        <NewInvoiceForm :id="id" @closeForm="closeForm" v-if="isInvoiceFormOpen" />
+        <transition name="fade">
+            <NewInvoiceForm :id="id" @closeForm="closeForm" v-if="isInvoiceFormOpen" />
+        </transition>
         <button class="back" @click="goBack">
             <img src="../assets/icon-arrow-left.svg" alt="">
             Go back
@@ -10,7 +12,7 @@
                 <div>
                     <span class="status-text">Status</span>
                     <div class="status-tag">
-                        <StatusBadge :status="getInvoiceById(id).status"/>
+                        <StatusBadge :status="status"/>
                     </div>
                 </div>
                 <div>
@@ -85,51 +87,42 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { InvoiceStore } from '@/store/store';
-import { ref } from '@vue/runtime-core';
+import { computed, ref } from '@vue/runtime-core';
 import { useRoute, useRouter } from 'vue-router'
 import StatusBadge from '@/components/StatusBadge.vue';
 import NewInvoiceForm from '@/components/NewInvoiceForm.vue';
-export default {
-    setup(props, ctx) {
-        const route = useRoute();
-        const router = useRouter();
+import { defineEmits } from 'vue';
 
-        const id = ref();
-        id.value = route.params.id;
-        const deleteClicked = ()=>{
-            ctx.emit('deleteClicked', id.value)
-        }
-        const goBack = ()=>{
-            router.go(-1);
-        }
-        const store = InvoiceStore();
-        const {getInvoiceById} = store;
-        console.log(getInvoiceById(id.value))
-        const markAsPaid = ()=>{
-            console.log("marked")
-            store.markAsPaid(id.value, getInvoiceById(id.value).docId)
-        }
-        const isInvoiceFormOpen = ref(false);
-        const closeForm = ()=>{
-            setTimeout(()=>{
-                isInvoiceFormOpen.value = false
-            }, 340)
-        }
+const emit = defineEmits(['deleteClicked'])
 
-        return {
-            id,
-            //info,
-            isInvoiceFormOpen,
-            deleteClicked,
-            goBack,
-            markAsPaid,
-            getInvoiceById,
-            closeForm
-        };
-    },
-    components: { StatusBadge, NewInvoiceForm }
+const route = useRoute();
+const router = useRouter();
+const store = InvoiceStore();
+
+const id = ref();
+id.value = route.params.id;
+
+const status = computed(()=>{
+    return store.getInvoiceById(id.value).status
+})
+
+const deleteClicked = ()=>{
+    emit('deleteClicked', id.value)
+}
+
+const goBack = ()=>{
+    router.go(-1);
+}
+
+const {getInvoiceById} = store;
+const markAsPaid = ()=>{
+    store.markAsPaid(id.value, getInvoiceById(id.value).docId)
+}
+const isInvoiceFormOpen = ref(false);
+const closeForm = ()=>{
+    isInvoiceFormOpen.value = false
 }
 </script>
 
@@ -143,6 +136,16 @@ export default {
 </style>
 
 <style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
 .invoice-container.formOpen{
   max-height: 100vh;
   overflow: hidden;

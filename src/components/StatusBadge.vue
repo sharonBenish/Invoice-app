@@ -1,37 +1,29 @@
 <template>
   <div class="status" :style="badgeStyle">
-    <p>{{status}}</p>
+    <p>{{props.status}}</p>
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from '@vue/reactivity';
+import { defineProps } from 'vue';
 
-export default {
-    props:{
-        status:{
-            type:String
-        }
-    },
-    setup(props){
-        const badgeStyle = computed(()=>{
-            if (props.status == 'paid'){
-                const style =  {'--badgeBackground': 'rgba(51, 214, 159, 0.06)' ,'--badgeText': '#32D69F'}
-                return style
-            } else if (props.status == 'pending'){
-                const style =  {'--badgeBackground': 'rgba(255, 143, 0, 0.06)' ,'--badgeText': '#FF8F00'}
-                return style
-            } else if (props.status == 'draft'){
-                const style =  {'--badgeBackground': 'rgba(223, 227, 250, 0.06)' ,'--badgeText': '#484d64'}
-                return style
-            }
-        })
+const props = defineProps({
+    status:String
+})
 
-        return{
-            badgeStyle
-        }
+const badgeStyle = computed(()=>{
+    if (props.status == 'paid'){
+        const style =  {'--badgeBackground': 'rgba(51, 214, 159, 0.06)' ,'--badgeText': '#32D69F'}
+        return style
+    } else if (props.status == 'pending'){
+        const style =  {'--badgeBackground': 'rgba(255, 143, 0, 0.06)' ,'--badgeText': '#FF8F00'}
+        return style
+    } else if (props.status == 'draft'){
+        const style =  {'--badgeBackground': 'rgba(223, 227, 250, 0.06)' ,'--badgeText': '#484d64'}
+        return style
     }
-}
+})
 </script>
 
 <style scoped>

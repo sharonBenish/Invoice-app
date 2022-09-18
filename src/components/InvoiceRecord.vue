@@ -11,38 +11,29 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
 import StatusBadge from './StatusBadge.vue';
+import { defineProps } from 'vue';
 
-export default {
-    props: {
-        invoice: {
-            type: Object
-        }
-    },
-    setup(props) {
-        const formatDate = computed(() => {
-            const dateString = new Date(props.invoice.paymentDue).toDateString();
-            return `${dateString.substring(8, 10)} ${dateString.substring(4, 7)} ${dateString.substring(11, 15)}`;
-        });
+const props = defineProps({
+    invoice:Object
+});
 
-        const router = useRouter();
-        const goToRecordInfo = ()=>{
-            router.push({
-                name:'InvoiceInfo',
-                params:{
-                    id:props.invoice.id,
-                }
-            })
+const formatDate = computed(() => {
+    const dateString = new Date(props.invoice.paymentDue).toDateString();
+    return `${dateString.substring(8, 10)} ${dateString.substring(4, 7)} ${dateString.substring(11, 15)}`;
+});
+
+const router = useRouter();
+const goToRecordInfo = ()=>{
+    router.push({
+        name:'InvoiceInfo',
+        params:{
+            id:props.invoice.id,
         }
-        return {
-            formatDate,
-            goToRecordInfo
-        };
-    },
-    components: { StatusBadge }
+    })
 }
 </script>
 <style scoped>
