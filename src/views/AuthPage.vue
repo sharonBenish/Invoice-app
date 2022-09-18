@@ -8,7 +8,7 @@
         <h2>Create Account</h2>
         <p>Create a new account</p>
     </div>
-    <form ref="form" @click="errorMsg = ''">
+    <form ref="form">
         <div class="email">
             <label>Email address</label>
             <input type="text" v-model="email">
@@ -39,10 +39,8 @@
 import { ref } from "@vue/reactivity";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { InvoiceStore } from "@/store/store";
-import json from "../data.json"
-import { watch } from "@vue/runtime-core";
-//import { onBeforeMount } from "@vue/runtime-core";
-//import { useRouter } from "vue-router";
+import json from "../data.json";
+import { onMounted, watch } from "@vue/runtime-core";
 
 const store = InvoiceStore();
 const hasAccount = ref(true);
@@ -53,22 +51,35 @@ const username = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 
+onMounted(()=>{
+    form.value.querySelectorAll("input").forEach((input) =>{
+        input.addEventListener("focus", ()=>{
+            errorMsg.value = ""
+        })
+    })
+})
+
+
 const auth = getAuth();
 const signUp = ()=>{
     store.setToUserMode()
-    if (password.value === confirmPassword.value && username.value.trim().length > 5){
+    if (password.value === confirmPassword.value && username.value.trim().length >= 5){
         createUserWithEmailAndPassword(auth, email.value, password.value)
             .then((cred)=>{
                 cred.user.displayName= username.value;
-                //console.log(cred.user);
-                //store.addUser(cred.user.uid);
                 form.value.reset();
             })
             .catch((err)=>{
                 console.log(err.message);
                 errorMsg.value = err.message;
             })
-    }  
+    } else if (username.value.trim() == ""){
+        errorMsg.value = "Please provide a username"
+    } else if (username.value.trim().length < 5){
+        errorMsg.value = "Username must be at least 5 characters"
+    } else if (password.value != confirmPassword.value){
+        errorMsg.value = "Your password does not match"
+    }
 }
 const signIn = ()=>{
     store.setToUserMode()
@@ -93,6 +104,7 @@ watch(hasAccount,()=>{
     password.value ="";
     confirmPassword.value="";
     username.value ="";
+    errorMsg.value = "";
 })
 </script>
 
