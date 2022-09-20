@@ -18,43 +18,43 @@
                 <div>
                     <button class="edit" @click="isInvoiceFormOpen = true">Edit</button>
                     <button class="delete" @click="deleteClicked">Delete</button>
-                    <button class="mark" v-if="getInvoiceById(id).status != 'paid'" @click="markAsPaid">Mark As Paid</button>
+                    <button class="mark" v-if="invoice.status != 'paid'" @click="markAsPaid">Mark As Paid</button>
                 </div>
             </div>
 
             <div class="main-info">
                 <div class="info">
                     <div class="id_description">
-                        <div class="id"><span>#</span>{{getInvoiceById(id).id}}</div>
-                        <div class="description">{{getInvoiceById(id).description}}</div>
+                        <div class="id"><span>#</span>{{invoice.id}}</div>
+                        <div class="description">{{invoice.description}}</div>
                     </div>
                     <div class="sender-address">
-                        <p>{{getInvoiceById(id).senderAddress.street}}</p>
-                        <p>{{getInvoiceById(id).senderAddress.city}}</p>
-                        <p>{{getInvoiceById(id).senderAddress.postCode}}</p>
-                        <p>{{getInvoiceById(id).senderAddress.country}}</p>
+                        <p>{{invoice.senderAddress.street}}</p>
+                        <p>{{invoice.senderAddress.city}}</p>
+                        <p>{{invoice.senderAddress.postCode}}</p>
+                        <p>{{invoice.senderAddress.country}}</p>
                     </div>
                     <div class="invoice-date">
                         <p class="title">Invoice Date</p>
-                        <p class="date bold">{{getInvoiceById(id).createdAt}}</p>
+                        <p class="date bold">{{invoice.createdAt}}</p>
                     </div>
                     <div class="payment-date">
                         <p class="title">Payment Due</p>
-                        <p class="date bold">{{getInvoiceById(id).paymentDue}}</p>
+                        <p class="date bold">{{invoice.paymentDue}}</p>
                     </div>
                     <div class="client-info">
                         <p class="title">Bill To</p>
-                        <p class="name bold">{{getInvoiceById(id).clientName}}</p>
+                        <p class="name bold">{{invoice.clientName}}</p>
                         <div class="address">
-                            <p>{{getInvoiceById(id).clientAddress.street}}</p>
-                            <p>{{getInvoiceById(id).clientAddress.city}}</p>
-                            <p>{{getInvoiceById(id).clientAddress.postCode}}</p>
-                            <p>{{getInvoiceById(id).clientAddress.country}}</p>
+                            <p>{{invoice.clientAddress.street}}</p>
+                            <p>{{invoice.clientAddress.city}}</p>
+                            <p>{{invoice.clientAddress.postCode}}</p>
+                            <p>{{invoice.clientAddress.country}}</p>
                         </div>
                     </div>
                     <div class="client-mail">
                         <p class="title">Sent To</p>
-                        <div class="mail bold">{{getInvoiceById(id).clientEmail}}</div>
+                        <div class="mail bold">{{invoice.clientEmail}}</div>
                     </div>
                 </div>
                 <div class="order-table">
@@ -65,7 +65,7 @@
                             <th>Price</th>
                             <th>Total</th>
                         </tr>
-                        <tr v-for="(item, index) in getInvoiceById(id).items" :key="index">
+                        <tr v-for="(item, index) in invoice.items" :key="index">
                             <td class="bold">{{item.name }}</td>
                             <td class="qty">{{ item.quantity }}</td>
                             <td class="price">{{ item.price }}</td>
@@ -75,14 +75,14 @@
                 </div>
                 <div class="total">
                     <p>Amount Due</p>
-                    <div>${{getInvoiceById(id).total}}</div>
+                    <div>${{invoice.total}}</div>
                 </div>
             </div>
         </div>
         <div class="footer">
             <button class="edit" @click="isInvoiceFormOpen = true">Edit</button>
             <button class="delete" @click="deleteClicked">Delete</button>
-            <button class="mark" v-if="getInvoiceById(id).status != 'paid'" @click="markAsPaid">Mark As Paid</button>
+            <button class="mark" v-if="invoice.status != 'paid'" @click="markAsPaid">Mark As Paid</button>
         </div>
     </div>
 </template>
@@ -106,6 +106,10 @@ id.value = route.params.id;
 
 const status = computed(()=>{
     return store.getInvoiceById(id.value).status
+})
+
+const invoice = computed(()=>{
+    return store.getInvoiceById(id.value)
 })
 
 const deleteClicked = ()=>{

@@ -191,13 +191,13 @@ export default {
             paymentDate.setDate(date.getDate() + formDetails.value.paymentTerms);
             const paymentDue = paymentDate.toISOString().substring(0, 10);
             const createdAt = date.toISOString().substring(0, 10);
-            console.log(createdAt);
-            console.log(paymentDue);
+            //console.log(createdAt);
+            //console.log(paymentDue);
             formDetails.value.id = nanoid(6).toUpperCase();
             formDetails.value.createdAt = createdAt;
             formDetails.value.paymentDue = paymentDue;
             formDetails.value.total = invoiceTotal.value
-            console.log(formDetails.value);
+            //console.log(formDetails.value);
             store.addNewInvoice(formDetails.value);
         };
 
@@ -225,7 +225,6 @@ export default {
         const closeForm = () => {
             form.value.classList.add('out');
             form.value.parentNode.classList.add('out');
-            //event.target.parentNode.parentNode.classList.add('out');
             ctx.emit("closeForm");
         };
         const saveChanges = (event) => {

@@ -73,7 +73,7 @@ export const InvoiceStore = defineStore("invoice", {
             if (this.demoMode){
                 const indx = this.invoiceData.findIndex(invoice => invoice.id == id);
                 this.invoiceData[indx] = changes;
-                console.log(this.invoiceData)
+                //console.log(this.invoiceData)
             }else{
                 const db = getFirestore();
                 const docRef = doc(db, 'users', this.user.uid, 'invoices', docId);
@@ -101,21 +101,10 @@ export const InvoiceStore = defineStore("invoice", {
                  snapshot.docs.forEach((doc)=>{
                      invoices.push({...doc.data(), docId: doc.id})
                  })
-                 console.log(invoices)
+                 //console.log(invoices)
                  this.invoiceData = invoices;
                  this.databaseLoaded = true;
              })
-            // const docRef = doc(db, "users", this.user.uid);
-            // onSnapshot(docRef, (snapshot)=>{
-            //     const invoices = [];
-            //     console.log(snapshot)
-            //     // console.log(snapshot.data())
-            //     snapshot.forEach((doc)=>{
-            //         invoices.push({...doc.data()})
-            //     })
-            //     console.log(invoices)
-            // })
-            
         }
     }
 })
