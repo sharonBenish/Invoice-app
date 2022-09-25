@@ -52,11 +52,12 @@ const OpenDeleteModal = (id)=>{
   invoiceId.value= id;
 }
 const deleteInvoice = ()=>{
-  invoiceStore.deleteInvoice(invoiceId.value, invoiceStore.getInvoiceById(invoiceId.value).docId);
+  //invoiceStore.deleteInvoice(invoiceId.value, invoiceStore.getInvoiceById(invoiceId.value).docId);
   showDeleteModal.value = false;
-  setTimeout(()=>{
-    router.go(-1);
-  }, 500)
+  router.go(-1);
+  // setTimeout(()=>{
+  //   router.go(-1);
+  // }, 500)
 }
 
 const theme = ThemeToggle();

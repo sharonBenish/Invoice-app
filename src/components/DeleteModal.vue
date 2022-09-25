@@ -12,16 +12,19 @@
 </template>
 
 <script setup>
+    import { InvoiceStore } from '@/store';
     import { defineProps } from 'vue';
     import { defineEmits } from 'vue';
     const props = defineProps({
          id:String
     })
+    const store = InvoiceStore();
     const emit = defineEmits(['cancelClicked', 'deleteClicked'])
     const cancelClicked = ()=>{
         emit('cancelClicked')
     }
     const deleteClicked = ()=>{
+        store.deleteInvoice( props.id , store.getInvoiceById(props.id).docId);
         emit('deleteClicked')
     }
 </script>

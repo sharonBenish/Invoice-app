@@ -105,7 +105,13 @@ const id = ref();
 id.value = route.params.id;
 
 const status = computed(()=>{
-    return store.getInvoiceById(id.value).status
+    if(store.getInvoiceById(id.value)){
+        return store.getInvoiceById(id.value).status
+    } else{
+        const invoiceStatus = "deleted";
+        //console.log(invoiceStatus);
+        return invoiceStatus
+    }
 })
 
 const invoice = computed(()=>{
