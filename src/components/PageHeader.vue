@@ -12,7 +12,8 @@
             <img class="img-fluid" src="../assets/image-avatar.jpeg" alt="avatar" @click="showProfileMenu = !showProfileMenu" @blur="test">
             <div class="pop-up" v-if="showProfileMenu">
                 <p>Hi {{invoiceStore.user.displayName|| "User"}}! </p>
-                <button class="log-out" @click="LogOut">Sign Out</button>
+                <p v-if="route.path === '/'" class="msg">You can Login, Sign Up or use the app in demo mode.</p>
+                <button class="log-out" @click="LogOut"  v-else>Sign Out</button>
             </div>
         </div>
     </div>
@@ -52,7 +53,7 @@
             path:"/"
         })
     }
-    console.log(invoiceStore.user)
+    //console.log(invoiceStore.user)
     watch( route, ()=>{
         showProfileMenu.value = false;
     })
@@ -158,6 +159,10 @@ header > div:last-of-type{
     background: var(--purple-light);
 }
 
+.msg{
+    font-size: smaller;
+    margin-top:1rem;
+}
 @media (min-width:1025px) {
     header{
         position: fixed;
