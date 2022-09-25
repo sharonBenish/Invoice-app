@@ -111,7 +111,7 @@
 
 <script>
 import { nanoid } from 'nanoid';
-import { InvoiceStore } from '@/store/store';
+import { InvoiceStore } from '@/store';
 import { ref } from '@vue/reactivity';
 import { computed } from '@vue/runtime-core';
 import InputField from './InputField.vue';

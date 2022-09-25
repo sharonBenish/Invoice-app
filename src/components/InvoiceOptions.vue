@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { InvoiceStore } from '@/store/store';
+import { InvoiceStore } from '@/store';
 import { ref } from '@vue/reactivity';
 import CustomCheckbox from './CustomCheckbox.vue';
 import { defineEmits } from 'vue';

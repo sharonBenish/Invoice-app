@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { InvoiceStore } from "@/store/store";
+import { InvoiceStore } from "@/store";
 import NewInvoiceForm from "@/components/NewInvoiceForm.vue";
 import InvoiceOptions from "../components/InvoiceOptions.vue";
 import InvoiceRecord from "@/components/InvoiceRecord.vue";

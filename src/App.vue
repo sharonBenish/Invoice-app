@@ -17,7 +17,7 @@
 <script setup>
 import PageHeader from './components/PageHeader.vue';
 import json from "./data.json"
-import { InvoiceStore } from "@/store/store";
+import { InvoiceStore } from "@/store";
 import { ThemeToggle } from './store/theme';
 import { onBeforeMount, ref } from '@vue/runtime-core';
 import DeleteModal from './components/DeleteModal.vue';

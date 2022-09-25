@@ -24,7 +24,7 @@
     import { ThemeToggle } from '@/store/theme';
     import { ref } from '@vue/reactivity';
     import { useRoute, useRouter } from "vue-router";
-    import { InvoiceStore } from "@/store/store";
+    import { InvoiceStore } from "@/store";
     import { watch } from "@vue/runtime-core";
 
     const store = ThemeToggle();

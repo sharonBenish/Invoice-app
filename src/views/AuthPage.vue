@@ -38,7 +38,7 @@
 <script setup>
 import { ref } from "@vue/reactivity";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
-import { InvoiceStore } from "@/store/store";
+import { InvoiceStore } from "@/store";
 import json from "../data.json";
 import { onMounted, watch } from "@vue/runtime-core";
 

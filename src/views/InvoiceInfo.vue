@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { InvoiceStore } from '@/store/store';
+import { InvoiceStore } from '@/store';
 import { computed, ref } from '@vue/runtime-core';
 import { useRoute, useRouter } from 'vue-router'
 import StatusBadge from '@/components/StatusBadge.vue';
