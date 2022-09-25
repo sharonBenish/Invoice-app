@@ -26,8 +26,12 @@
             <input type="password" v-model="confirmPassword">
         </div>
         <p class="error-msg">{{errorMsg}}</p>
-        <button class="auth" v-if="hasAccount" @click.prevent="signIn">Log In</button>
-        <button class="auth" v-else @click.prevent="signUp">Sign Up</button>
+        <button class="auth" v-if="hasAccount" @click.prevent="signIn">Log In
+            <img src="../assets/Spinner-1s-200px.svg" alt="" v-if="authenticating">
+        </button>
+        <button class="auth" v-else @click.prevent="signUp">Sign Up
+            <img src="../assets/Spinner-1s-200px.svg" alt="" v-if="authenticating">
+        </button>
         <router-link to="/invoices"><button @click="demo" class="demo">Demo</button></router-link>
         <p v-if="hasAccount">Don't have an account? <a @click="hasAccount = false">Sign Up</a></p>
         <p v-else>ALready have an account? <a @click="hasAccount = true">Login</a></p>
@@ -50,6 +54,7 @@ const email = ref("");
 const username = ref("");
 const password = ref("");
 const confirmPassword = ref("");
+const authenticating = ref(false);
 
 onMounted(()=>{
     form.value.querySelectorAll("input").forEach((input) =>{
@@ -64,6 +69,7 @@ const auth = getAuth();
 const signUp = ()=>{
     store.setToUserMode()
     if (password.value === confirmPassword.value && username.value.trim().length >= 5){
+        authenticating.value= true;
         createUserWithEmailAndPassword(auth, email.value, password.value)
             .then((cred)=>{
                 cred.user.displayName= username.value;
@@ -72,6 +78,7 @@ const signUp = ()=>{
             .catch((err)=>{
                 console.log(err.message);
                 errorMsg.value = err.message;
+                authenticating.value= false;
             })
     } else if (username.value.trim() == ""){
         errorMsg.value = "Please provide a username"
@@ -82,6 +89,8 @@ const signUp = ()=>{
     }
 }
 const signIn = ()=>{
+    authenticating.value=true;
+    console.log(authenticating.value);
     store.setToUserMode()
     signInWithEmailAndPassword(auth, email.value, password.value)
         .then((cred)=>{
@@ -91,6 +100,7 @@ const signIn = ()=>{
         .catch((err)=>{
             console.log(err.message);
             errorMsg.value = err.message;
+            authenticating.value= false;
         })
 }
 
@@ -105,6 +115,7 @@ watch(hasAccount,()=>{
     confirmPassword.value="";
     username.value ="";
     errorMsg.value = "";
+    authenticating.value=false;
 })
 </script>
 
@@ -190,6 +201,7 @@ button{
     cursor:pointer;
     color:#fff;
     margin: 1rem 0;
+    position:relative
 }
 button:active{
     transform: scale(0.95);
@@ -217,6 +229,12 @@ a{
     color:rgb(236, 87, 87);
     font-weight: bolder;
     text-align: left;
+}
+button>img{
+    position:absolute;
+    max-width:40px;
+    top:50%;
+    transform: translateY(-50%);
 }
 @media (min-width:1025px) {
 }
